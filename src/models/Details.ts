@@ -1,5 +1,6 @@
 import { IsString, MaxLength, MinLength, IsNumber, Max, Min, IsEmail, IsBoolean, IsEnum, IsDate } from "class-validator"
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { Activity } from "./Activity"
 
 const Types= {
     requiriments: 'requiriments',
@@ -29,4 +30,8 @@ export class Details extends BaseEntity {
     @Column()
     @IsDate()
     update_at!: Date
+
+  //Declaramos la relación que existe entre Details y Activity.
+  @OneToMany(() => Activity, (activities) => activities.detailsActivity)
+  detailsActivities!: Activity[];
 }
