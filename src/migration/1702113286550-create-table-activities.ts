@@ -23,9 +23,20 @@ export class CreateTableActivities1702113286550 implements MigrationInterface {
             type: "int",
           },
           {
+            name: "intensity",
+            type: "enum",
+            enum: ["high", "medium", "low"],
+            default: '"medium"'
+        },
+        {
+            name: "minimum age",
+            type: "int",
+            length: "2",
+          },
+          {
             name: "description",
             type: "varchar",
-            length: "250",
+            length: "1500",
           },
           {
             name: "price",

@@ -51,7 +51,7 @@ export class CreateTableReviews1702113309706 implements MigrationInterface {
                 ],
                 foreignKeys: [
                     {
-                      columnNames: ["id_users"],
+                      columnNames: ["id_user"],
                       referencedTableName: "users",
                       referencedColumnNames: ["id"],
                       onDelete: "CASCADE",

@@ -47,26 +47,12 @@ export class CreateTableBussiness1702113329740 implements MigrationInterface {
             onUpdate: "CURRENT_TIMESTAMP",
           },
         ],
-        foreignKeys: [
-          {
-            columnNames: ["id_user"],
-            referencedTableName: "users",
-            referencedColumnNames: ["id"],
-            onDelete: "CASCADE",
-          },
-          {
-            columnNames: ["id_activity"],
-            referencedTableName: "activities",
-            referencedColumnNames: ["id"],
-            onDelete: "CASCADE",
-          },
-        ],
       }),
       true
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("activities");
+    await queryRunner.dropTable("bussiness");
   }
 }

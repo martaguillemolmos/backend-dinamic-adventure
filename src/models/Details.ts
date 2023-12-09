@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
 const Types= {
     requiriments: 'requiriments',
     details: 'details',
-    descripction: 'descripction'
+    itinerary: 'itinerary'
   }
 
 @Entity()

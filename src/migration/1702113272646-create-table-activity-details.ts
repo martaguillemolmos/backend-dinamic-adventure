@@ -17,13 +17,13 @@ export class CreateTableActivityDetails1702113272646 implements MigrationInterfa
                     {
                         name: "type",
                         type: "enum",
-                        enum: ["requiriments", "details", "descripction"],
-                        default: '"descripction"'
+                        enum: ["requiriments", "details", "itinerary"],
+                        default: '"details"'
                     },
                     {
                         name: "information",
                         type: "varchar",
-                        length: "250"
+                        length: "400"
                     },    
                     {
                         name: "created_at",
