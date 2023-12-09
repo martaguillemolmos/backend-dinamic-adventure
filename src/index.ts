@@ -6,13 +6,10 @@ import { router as routerAppointment } from "./routes/appointmentsRoutes";
 import { router as routerReview } from "./routes/reviewsRoutes";
 import { router as routerBussiness } from "./routes/bussinessRoutes";
 
-const app = express ()
-
+import { AppDataSource } from "./db";
 const PORT = process.env.PORT || 4000;
 
-app.listen (PORT, () => {
-    console.log(`Server running ${PORT}`);
-})
+const app = express ();
 
 app.use ('/user', routerUser);
 app.use ('/activity', routerActivity);
@@ -20,3 +17,15 @@ app.use ('/details', routerDetails);
 app.use ('/appointment', routerAppointment);
 app.use ('/review', routerReview);
 app.use ('/bussiness', routerBussiness);
+
+AppDataSource.initialize()
+.then(() => {
+ console.log('Database connected');
+ 
+ app.listen(PORT, () => {
+  console.log(`Server running ${PORT}`);
+});
+})
+.catch(error => {
+ console.log(error)
+})
