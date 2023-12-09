@@ -1,0 +1,148 @@
+{
+	"info": {
+		"_postman_id": "8cb20ad5-5d01-469f-93f0-8024bca48ba0",
+		"name": "Proyecto 7 - Backend: Dinamic Adventure",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30593312"
+	},
+	"item": [
+		{
+			"name": "Activity",
+			"item": [
+				{
+					"name": "Recuperar todas las actividades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/activity",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"activity"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Activity details",
+			"item": [
+				{
+					"name": "Recuperar todos los detalles de las actividades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/details",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"details"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Recuperar todos los usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/user",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Appointment",
+			"item": [
+				{
+					"name": "Recuperar todas las citas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/appointment",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"appointment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "Recuperar todas las reseñas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/review",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"review"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bussiness",
+			"item": [
+				{
+					"name": "Recuperar todas la información de la empresa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/bussiness",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"bussiness"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
