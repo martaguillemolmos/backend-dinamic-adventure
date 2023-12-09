@@ -1,5 +1,5 @@
 import { IsString, MaxLength, MinLength, IsNumber, Max, Min, IsEmail, IsBoolean, IsEnum, IsDate } from "class-validator"
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm"
 
 const Roles = {
     user: 'user',
@@ -8,19 +8,19 @@ const Roles = {
   }
 
 @Entity()
-export class User {
+export class User extends BaseEntity{
     @PrimaryGeneratedColumn()
     id!: number
   
     @Column()
     @IsString()
-    @MaxLength(0)
+    @MaxLength(50)
     @MinLength(3)
     name!: string
   
     @Column()
     @IsString()
-    @MaxLength(0)
+    @MaxLength(50)
     @MinLength(3)
     surname!: string
   

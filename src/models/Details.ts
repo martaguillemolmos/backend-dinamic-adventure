@@ -1,5 +1,5 @@
 import { IsString, MaxLength, MinLength, IsNumber, Max, Min, IsEmail, IsBoolean, IsEnum, IsDate } from "class-validator"
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm"
 
 const Types= {
     requiriments: 'requiriments',
@@ -8,13 +8,13 @@ const Types= {
   }
 
 @Entity()
-export class Details {
+export class Details extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number
     
     @Column({type:"enum", enum: Types})
     @IsEnum(Types)
-    role!:string
+    types!:string
   
     @Column()
     @IsString()
