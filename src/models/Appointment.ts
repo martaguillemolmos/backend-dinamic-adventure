@@ -1,11 +1,7 @@
 import {
-  IsString,
-  MaxLength,
-  MinLength,
   IsNumber,
   Max,
   Min,
-  IsEmail,
   IsBoolean,
   IsEnum,
   IsDate,
@@ -18,7 +14,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
+import { Users } from "./User";
 import { Activity } from "./Activity";
 
 const Status = {
@@ -72,9 +68,9 @@ export class Appointment extends BaseEntity {
   update_at!: Date;
 
   //Declaramos la relación que existe entre esta tabla y Users.
-  @ManyToOne(() => User, (users) => users.appointments)
+  @ManyToOne(() => Users, (users) => users.appointments)
   @JoinColumn({ name: "id_user" })
-  user!: User;
+  user!: Users;
 
   @ManyToOne(() => Activity, (activities) => activities.appointments)
   @JoinColumn({ name: "id_activity" })

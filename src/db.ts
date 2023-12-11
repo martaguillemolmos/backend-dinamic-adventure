@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { DataSource } from "typeorm";
 import { CreateTableUsers1702113174045 } from "./migration/1702113174045-create-table-users";
 import { CreateTableActivityDetails1702113272646 } from "./migration/1702113272646-create-table-activity-details";
-import { User } from "./models/User";
+import { Users } from "./models/User";
 import { Details } from "./models/Details";
 import { CreateTableActivities1702113286550 } from "./migration/1702113286550-create-table-activities";
 import { CreateTableReviews1702113309706 } from "./migration/1702113309706-create-table-reviews";
@@ -25,7 +25,7 @@ const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User, Details, Activity, Appointment, Review, Bussiness],
+  entities: [Users, Details, Activity, Appointment, Review, Bussiness],
   migrations: [CreateTableUsers1702113174045, CreateTableActivityDetails1702113272646, CreateTableActivities1702113286550, CreateTableReviews1702113309706, CreateTableAppointments1702113318143, CreateTableBussiness1702113329740],
   synchronize: false,
   logging: false,

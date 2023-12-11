@@ -5,9 +5,7 @@ import {
   IsNumber,
   Max,
   Min,
-  IsEmail,
   IsBoolean,
-  IsEnum,
   IsDate,
 } from "class-validator";
 import {
@@ -19,7 +17,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
+import { Users } from "./User";
 import { Activity } from "./Activity";
 
 @Entity()
@@ -58,9 +56,9 @@ export class Review extends BaseEntity {
   update_at!: Date;
 
   //Declaramos la relación que existe entre esta tabla y Users.
-  @ManyToOne(() => User, (users) => users.reviews)
+  @ManyToOne(() => Users, (users) => users.reviews)
   @JoinColumn({ name: "id_user" })
-  user!: User;
+  user!: Users;
 
   //Relación uno a uno con Activity
   @OneToOne(() => Activity, (activity) => activity.review)

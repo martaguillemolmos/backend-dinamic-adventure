@@ -25,11 +25,6 @@ export class CreateTableUsers1702113174045 implements MigrationInterface {
                         length: "50"
                     },
                     {
-                        name: "avatar",
-                        type: "varchar",
-                        length: "300"
-                    },
-                    {
                         name: "phone",
                         type: "int",
                         length: "14",

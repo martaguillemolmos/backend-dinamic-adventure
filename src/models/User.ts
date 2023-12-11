@@ -30,7 +30,7 @@ const Roles = {
 };
 
 @Entity()
-export class User extends BaseEntity {
+export class Users extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -45,12 +45,6 @@ export class User extends BaseEntity {
   @MaxLength(50)
   @MinLength(3)
   surname!: string;
-
-  @Column()
-  @IsString()
-  @MaxLength(300)
-  @MinLength(3)
-  avatar!: string;
 
   @Column()
   @IsNumber()
@@ -83,7 +77,7 @@ export class User extends BaseEntity {
 
   @Column()
   @IsDate()
-  update_at!: Date;
+  updated_at!: Date;
 
   //Declaramos la relación que existe entre User y la tabla intermedia, Appointment
   @OneToMany(() => Appointment, (appointments) => appointments.user)

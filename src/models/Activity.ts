@@ -22,7 +22,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
+import { Users } from "./User";
 import { Appointment } from "./Appointment";
 import { Details } from "./Details";
 import { Review } from "./Review";
@@ -91,7 +91,7 @@ export class Activity extends BaseEntity {
   appointments!: Appointment[];
 
   //Declaramos la relación muchos a muchos entre User y Activity
-  @ManyToMany(() => User)
+  @ManyToMany(() => Users)
   @JoinTable({
     name: "appointments",
     joinColumn: {
@@ -103,7 +103,7 @@ export class Activity extends BaseEntity {
       referencedColumnName: "id",
     },
   })
-  activitiesUsers!: User[];
+  activitiesUsers!: Users[];
 
   //Declaramos la relación que existe entre esta tabla y Details.
   @ManyToOne(() => Details, (details) => details.activities)
