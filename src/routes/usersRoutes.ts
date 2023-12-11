@@ -5,7 +5,7 @@ const router = Router ();
 
 export {router}
 
-router.post ("/", createUser);
-router.post ("/login", loginUser);
+router.post ("/", loginUser);
+router.post ("/register", createUser);
 router.get("/", getAllUsers);
 router.get("/profile", auth, profileUser);
