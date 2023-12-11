@@ -10,7 +10,6 @@ declare global {
     namespace Express {
         export interface Request {
             token: TokenDecored
-            //token: { id:number, role: string} lo declaramos fuera para que se pueda utilizar fuera de ella. 
         }
     }
 }

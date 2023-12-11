@@ -175,7 +175,7 @@ const profileUser = async (req: any, res: Response) => {
     }
   };
 
-//Recuperar todos los usuarios
+// Recuperar todos los usuarios
 const getAllUsers = async (req: Request, res: Response) => {
     try {
         // Recuperamos a todos los usuarios
@@ -201,6 +201,7 @@ const getAllUsers = async (req: Request, res: Response) => {
           message: "No hemos podido recuperar los usuarios",
           error: error,
         });
-      }};
+    }
+};
 
 export {createUser, loginUser, profileUser, getAllUsers };
