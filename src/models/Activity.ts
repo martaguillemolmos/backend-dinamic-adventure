@@ -82,19 +82,16 @@ export class Activity extends BaseEntity {
   update_at!: Date;
 
   //Declaramos la relación que existe entre Activity y Review
-  @OneToOne(() => Review, reviews => reviews.activityReview)
+  @OneToOne(() => Review, (review) => review.activity)
   @JoinColumn()
-  activityReview!: Review;
+  review!: Review;
 
   //Declaramos la relación que existe entre Activity y la tabla intermedia, Appointment
-  @OneToMany(
-    () => Appointment,
-    (appointments) => appointments.activityAppointment
-  )
-  activityAppointments!: Appointment[];
+  @OneToMany(() => Appointment, (appointments) => appointments.activity)
+  appointments!: Appointment[];
 
   //Declaramos la relación muchos a muchos entre User y Activity
-  @ManyToMany(() => Activity)
+  @ManyToMany(() => User)
   @JoinTable({
     name: "appointments",
     joinColumn: {
@@ -106,10 +103,10 @@ export class Activity extends BaseEntity {
       referencedColumnName: "id",
     },
   })
-  activityUsers!: User[];
+  activitiesUsers!: User[];
 
   //Declaramos la relación que existe entre esta tabla y Details.
-  @ManyToOne(() => Details, (details) => details.detailsActivities)
+  @ManyToOne(() => Details, (details) => details.activities)
   @JoinColumn({ name: "id_details" })
-  detailsActivity!: Details;
+  details!: Details;
 }

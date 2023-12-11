@@ -72,12 +72,11 @@ export class Appointment extends BaseEntity {
   update_at!: Date;
 
   //Declaramos la relación que existe entre esta tabla y Users.
-  @ManyToOne(() => User, (users) => users.userAppointments)
+  @ManyToOne(() => User, (users) => users.appointments)
   @JoinColumn({ name: "id_user" })
-  userAppointment!: User;
+  user!: User;
 
-  //Declaramos la relación que existe entre esta tabla y Appointments.
-  @ManyToOne(() => Activity, (activities) => activities.activityAppointments)
+  @ManyToOne(() => Activity, (activities) => activities.appointments)
   @JoinColumn({ name: "id_activity" })
-  activityAppointment!: Appointment;
+  activity!: Activity;
 }

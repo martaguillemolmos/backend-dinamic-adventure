@@ -32,6 +32,6 @@ export class Details extends BaseEntity {
     update_at!: Date
 
   //Declaramos la relación que existe entre Details y Activity.
-  @OneToMany(() => Activity, (activities) => activities.detailsActivity)
-  detailsActivities!: Activity[];
+  @OneToMany(() => Activity, (activities) => activities.details)
+  activities!: Activity[];
 }

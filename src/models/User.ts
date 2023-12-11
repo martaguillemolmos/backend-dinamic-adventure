@@ -86,12 +86,12 @@ export class User extends BaseEntity {
   update_at!: Date;
 
   //Declaramos la relación que existe entre User y la tabla intermedia, Appointment
-  @OneToMany(() => Appointment, (appointments) => appointments.userAppointment)
-  userAppointments!: Appointment[];
+  @OneToMany(() => Appointment, (appointments) => appointments.user)
+  appointments!: Appointment[];
 
   //Declaramos la relación que existe entre User y la tabla intermedia, Appointment
-  @OneToMany(() => Review, (reviews) => reviews.userReview)
-  userReviews!: Review[];
+  @OneToMany(() => Review, (reviews) => reviews.user)
+  reviews!: Review[];
 
   //Declaramos la relación muchos a muchos entre User y Activity
   @ManyToMany(() => Activity)
@@ -106,5 +106,5 @@ export class User extends BaseEntity {
       referencedColumnName: "id",
     },
   })
-  userActivities!: Activity[];
+  usersActivities!: Activity[];
 }

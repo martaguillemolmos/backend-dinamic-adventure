@@ -9,6 +9,10 @@ import { CreateTableActivities1702113286550 } from "./migration/1702113286550-cr
 import { CreateTableReviews1702113309706 } from "./migration/1702113309706-create-table-reviews";
 import { CreateTableAppointments1702113318143 } from "./migration/1702113318143-create-table-appointments";
 import { CreateTableBussiness1702113329740 } from "./migration/1702113329740-create-table-bussiness";
+import { Activity } from "./models/Activity";
+import { Appointment } from "./models/Appointment";
+import { Review } from "./models/Review";
+import { Bussiness } from "./models/Bussiness";
 
 
 
@@ -21,7 +25,7 @@ const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User, Details],
+  entities: [User, Details, Activity, Appointment, Review, Bussiness],
   migrations: [CreateTableUsers1702113174045, CreateTableActivityDetails1702113272646, CreateTableActivities1702113286550, CreateTableReviews1702113309706, CreateTableAppointments1702113318143, CreateTableBussiness1702113329740],
   synchronize: false,
   logging: false,

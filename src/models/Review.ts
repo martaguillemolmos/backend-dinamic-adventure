@@ -58,12 +58,12 @@ export class Review extends BaseEntity {
   update_at!: Date;
 
   //Declaramos la relación que existe entre esta tabla y Users.
-  @ManyToOne(() => User, (users) => users.userReviews)
+  @ManyToOne(() => User, (users) => users.reviews)
   @JoinColumn({ name: "id_user" })
-  userReview!: User;
+  user!: User;
 
   //Relación uno a uno con Activity
-  @OneToOne(() => Activity, activities => activities.activityReview)
+  @OneToOne(() => Activity, (activity) => activity.review)
   @JoinColumn({ name: "id_activity" }) // Coloca @JoinColumn aquí
-  activityReview!: Activity;
+  activity!: Activity;
 }

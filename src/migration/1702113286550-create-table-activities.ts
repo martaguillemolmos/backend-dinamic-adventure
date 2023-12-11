@@ -43,6 +43,7 @@ export class CreateTableActivities1702113286550 implements MigrationInterface {
             type: "int",
             length: "10",
           },
+
           {
             name: "image",
             type: "varchar",
