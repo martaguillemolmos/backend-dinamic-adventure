@@ -210,11 +210,12 @@ const updateUser = async (req: Request, res: Response) => {
       return res.json ("Introduce un número de 9 caracteres, puede empezar desde el 6.")
     }
    
+    let updatedUser;
     //Comprobamos que el usuario exista
     if (!user) {
       return res.status(403).json({ message: "Usuario no encontrado" });
     } else {
-      await Users.update(
+     await Users.update(
         {
           id: req.token.id,
         },
@@ -226,8 +227,25 @@ const updateUser = async (req: Request, res: Response) => {
         }
       );
     }
+    console.log("user", user)
+
+    updatedUser = await Users.findOne({
+      where: {id : req.token.id},
+    })
+    
+   if (updatedUser){
+    return res.json({
+      succes: true,
+      message: `Enhorabuena ${updatedUser.name}, tu información se ha actualizado con éxito.`,
+      data: updatedUser,
+    });
+   } else {
+    return res.json({
+      succes: false,
+      message: `${user.name}, no se ha podido actualizar la información.`,
+    });
+   }
    
-    return res.json(`Enhorabuena ${user.name}, tu información se ha actualizado con éxito.`);
   } catch (error) {
     console.log("error", error);
     return res.json({
