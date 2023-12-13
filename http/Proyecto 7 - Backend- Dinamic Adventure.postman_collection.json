@@ -125,10 +125,19 @@
 					"response": []
 				},
 				{
-					"name": "Crear un detalle por el Id",
+					"name": "Crear un detalle",
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"details\",\r\n    \"information\": \"Soy el detalle de la iformacion, aqui va el primero, flipa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:4000/details",
 							"host": [

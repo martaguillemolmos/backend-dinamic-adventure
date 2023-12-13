@@ -140,6 +140,7 @@ const getDetailsById = async(req: Request, res: Response) => {
   }
 };
 
+//Recuperamos un detalle por el type.
 const getDetailsByType = async (req: Request, res: Response) => {
   try {
     //Recuperamos el id del details a través del body
@@ -164,6 +165,7 @@ const getDetailsByType = async (req: Request, res: Response) => {
     });
   }};
 
+//Recuperamos todos los detalles.
 const getAllDetails = async(req: Request, res: Response) => {
   try {
     // Recuperamos a todos los detalles
@@ -190,6 +192,7 @@ const getAllDetails = async(req: Request, res: Response) => {
   }
 };
 
+//Eliminamos un detalle por el Id.
 const deleteDetailsById = async(req: Request, res: Response) => {
   try {
     //Lógica para eliminar producto por el Id a través del body.
