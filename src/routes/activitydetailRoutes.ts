@@ -7,12 +7,12 @@ export {router}
 //Crear detalles
 router.post("/", createDetails);
 //Actualizar la información por el Id
-router.get("/", updateDetailsById);
+router.put("/", updateDetailsById);
 //Recuperar la información de un detalle por el Id
 router.get("/", getDetailsById);
 //Recuperar la información de un detalle por el type
-router.get("/", getDetailsByType);
-//Eliminar un detalle por el Id
-router.get("/", deleteDetailsById);
+router.get("/type", getDetailsByType);
 // Recuperar todos los detalles
-router.get("/", getAllDetails);
+router.get("/all", getAllDetails);
+//Eliminar un detalle por el Id
+router.delete("/", deleteDetailsById);

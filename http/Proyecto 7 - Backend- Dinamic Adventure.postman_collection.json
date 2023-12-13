@@ -38,6 +38,98 @@
 						"method": "GET",
 						"header": [],
 						"url": {
+							"raw": "localhost:4000/details/all",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"details",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar el detalle por el Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/details",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar el detalle por el Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/details/type",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"details",
+								"type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un detalle por el Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/details",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar un detalle por el Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/details",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear un detalle por el Id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
 							"raw": "localhost:4000/details",
 							"host": [
 								"localhost"
