@@ -113,6 +113,7 @@ const updateDetailsById = async (req: Request, res: Response) => {
   }
 };
 
+//Recuperamos un detalle por su id.
 const getDetailsById = async(req: Request, res: Response) => {
   try {
     //Recuperamos el id del details a través del body
@@ -131,13 +132,37 @@ const getDetailsById = async(req: Request, res: Response) => {
       data: details,
     })
   } catch (error) {
-    
+    return res.json({
+      succes: false,
+      message: "No se ha podido procesar la solicitud.",
+      error: error,
+    });
   }
 };
 
-const getDetailsByType = (req: Request, res: Response) => {
-  return res.send("Get details by Type");
-};
+const getDetailsByType = async (req: Request, res: Response) => {
+  try {
+    //Recuperamos el id del details a través del body
+    const typeBody = req.body.type;
+    //Comprobamos si existe
+    const details = await Details.find({
+      where : {type: typeBody},
+    })
+    //Validación
+    if (!typeBody){
+      return res.status(403).json(`No existe ningun detalle con este type.`);
+    } 
+    return res.json({
+      message: "Información del detalle",
+      data: details,
+    })
+  } catch (error) {
+    return res.json({
+      succes: false,
+      message: "No se ha podido procesar la solicitud.",
+      error: error,
+    });
+  }};
 
 const getAllDetails = (req: Request, res: Response) => {
   return res.send("Activity detail");
