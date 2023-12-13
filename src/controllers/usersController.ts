@@ -215,12 +215,76 @@ const updateUser = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Usuario no encontrado" });
     }
 
-    return res.json(`${user.name},tu información se ha actualizado con éxito.`);
+    return res.json(`Enhorabuena ${user.name}, tu información se ha actualizado con éxito.`);
   } catch (error) {
     console.log("error", error);
     return res.json({
       succes: false,
       message: `No se ha podido actualizar la información.`,
+      error: error,
+    });
+  }
+};
+
+//Modificar el password del usuario.
+const updatePassword = async (req: Request, res: Response) => {
+  try {
+    let user;
+    if (req.token.is_active == true) {
+      //Recuperamos el id del usuario a través del token
+      user = await Users.findOne({
+        where: { id: req.token.id },
+      });
+    } else {
+      return res.status(403).json({ message: "Usuario no autorizado" });
+    }
+
+    const passwordRegex = /^[a-zA-Z0-9]+$/
+    const { password, passwordOld } = req.body;
+
+    // Validación para comprobar que no nos envían un string vacío.
+    if ( password !== undefined && password.trim() === "" || passwordOld !== undefined && passwordOld.trim() === "") {
+      return res.status(404).json("La contraseña debe contener de 6 a 12 caracteres");
+    }
+   if (!passwordRegex.test(password)){
+    return res.status(404).json("La contraseña no puede contener caracteres especiales.")
+   }
+    // Validación que el password contiene como mínimo y como máximo.
+    if(passwordOld.length < 6 || passwordOld.length >12) {
+      return res.status(404).json("La contraseña debe contener de 6 a 12 caracteres.")
+    }
+    //Comprobamos que el usuario exista
+    if (!user) {
+      return res.status(403).json({ message: "Usuario no encontrado" });
+    }
+
+    if (passwordOld !== password) {
+      if (bcrypt.compareSync(passwordOld, user.password)) {
+        const encryptedPassword = bcrypt.hashSync(password.trim(), 10);
+        await Users.update(
+          {
+            id: req.token.id,
+          },
+          {
+            password: encryptedPassword,
+          }
+        );
+        return res.status(202).json(`${user.name}, la contraseña ha sido modificada`);
+      } else {
+        return res.status(401).json({
+          message: "La contraseña no coincide, vuelva a intentarlo.",
+        });
+      }
+    } else {
+      return res
+        .status(404)
+        .json({ message: "Recuerda: La contraseña debe ser diferente." });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha modificado la contraseña",
       error: error,
     });
   }
@@ -254,4 +318,4 @@ const getAllUsers = async (req: Request, res: Response) => {
 };
 
 
-export { createUser, loginUser, profileUser, getAllUsers, updateUser };
+export { createUser, loginUser, profileUser, getAllUsers, updateUser, updatePassword };

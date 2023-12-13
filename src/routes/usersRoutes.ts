@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { createUser, getAllUsers, loginUser, profileUser, updateUser } from "../controllers/usersController";
+import { createUser, getAllUsers, loginUser, profileUser, updatePassword, updateUser } from "../controllers/usersController";
 import { auth } from "../middelware/auth";
 const router = Router ();
 
@@ -17,3 +17,4 @@ router.get("/", getAllUsers);
 router.get("/profile", auth, profileUser);
 //Modificar la información del perfil.
 router.put ("/", auth, updateUser);
+router.patch ("/password", auth, updatePassword);
