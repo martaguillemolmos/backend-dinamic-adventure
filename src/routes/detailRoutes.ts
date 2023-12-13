@@ -1,5 +1,5 @@
-import { Request, Response, Router } from "express";
-import { createDetails, deleteDetailsById, getAllDetails, getDetailsById, getDetailsByType, updateDetailsById } from "../controllers/activitydetailController";
+import {  Router } from "express";
+import { createDetails, deleteDetailsById, getAllDetails, getDetailsById, getDetailsByType, updateDetailsById } from "../controllers/detailsController";
 const router = Router ();
 
 export {router}

@@ -4,7 +4,7 @@ import 'dotenv/config'
 
 import { router as routerUser } from "./routes/usersRoutes";
 import { router as routerActivity } from "./routes/activitiesRoutes";
-import { router as routerDetails } from "./routes/activitydetailRoutes";
+import { router as routerDetails } from "./routes/detailRoutes";
 import { router as routerAppointment } from "./routes/appointmentsRoutes";
 import { router as routerReview } from "./routes/reviewsRoutes";
 import { router as routerBussiness } from "./routes/bussinessRoutes";

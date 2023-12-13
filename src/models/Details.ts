@@ -1,5 +1,5 @@
 import { IsString, MaxLength, MinLength, IsNumber, Max, Min, IsEmail, IsBoolean, IsEnum, IsDate } from "class-validator"
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm"
 import { Activity } from "./Activity"
 
 const Types= {
@@ -9,6 +9,7 @@ const Types= {
   }
 
 @Entity()
+@Unique(['type', 'information'])
 export class Details extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number
