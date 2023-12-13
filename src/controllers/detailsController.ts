@@ -177,21 +177,43 @@ const getAllDetails = async(req: Request, res: Response) => {
     } else {
       return res.json({
         succes: true,
-        message: "Usuarios registrados.",
+        message: "Datos de todos los detalles",
         data: details,
       });
     }
   } catch (error) {
     return res.json({
       succes: false,
-      message: "No hemos podido recuperar los usuarios",
+      message: "No hemos podido recuperar los detalles.",
       error: error,
     });
   }
 };
 
-const deleteDetailsById = (req: Request, res: Response) => {
-  return res.send("Detele detail");
+const deleteDetailsById = async(req: Request, res: Response) => {
+  try {
+    //Lógica para eliminar producto por el Id a través del body.
+    const detailsId = req.body.id;
+    const detailDelete = await Details.findOneBy({
+      id: parseInt(detailsId),
+    });
+
+    if(!detailDelete){
+      return res.json ("El detalle no existe")
+    }
+
+    const detailRemoved = await Details.remove(detailDelete as Details);
+    if (detailRemoved) {
+      return res.json("Se ha eliminado el detalle correctamente");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha eliminado el detalle",
+      error: error,
+    });
+  }
 };
 
 export {
