@@ -129,8 +129,31 @@ const getActivityById = async(req: Request, res: Response) => {
   }
 }
 
-const getActivityByType = (req: Request, res: Response) => {
-  return res.send("Recuperar actividad por Type");
+//Recuperamos una actividad por el type
+const getActivityByType = async(req: Request, res: Response) => {
+  try {
+    //Recuperamos el id del details a través del body
+    const typeBody = req.body.type;
+    //Comprobamos si existe
+    const activity = await Activity.find({
+      where : {type: typeBody},
+    })
+    //Validación
+    if (!typeBody){
+      return res.status(403).json(`No existe ninguna actividad con este type.`);
+    } 
+    return res.json({
+      message: "Información de las actividades.",
+      data: activity,
+    })
+  } catch (error) {
+    return res.json({
+      succes: false,
+      message: "No se ha podido procesar la solicitud.",
+      error: error,
+    });
+  }
+
 };
 const getAllActivities = (req: Request, res: Response) => {
   return res.send("Recuperar todas las actividades");
