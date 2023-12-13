@@ -32,7 +32,6 @@ const createActivity = async(req: Request, res: Response) => {
       return res.status(404).json(errorValidate);
     }
 
-    
     const newActivity = await Activity.create({
       title: title.trim(),
       type,
@@ -56,8 +55,50 @@ const createActivity = async(req: Request, res: Response) => {
     res.status(500).json(`Error al crear la actividad: ${error}`);
   }
 };
-const updateActivity = (req: Request, res: Response) => {
-  return res.send("Modificar actividad");
+
+
+const updateActivity = async (req: Request, res: Response) => {
+//Recuperamos el id de la actividad
+const activityId = req.body.id;
+//Comprobamos que existe el id
+const existActivity = await Activity.findOneBy({
+  id: parseInt(activityId)
+})
+// Validamos
+if (!existActivity){
+  return res.json ("El id no existe")
+}
+
+//Recuperamos la información que van a modificar
+const { title, type, id_details, intensity, minimum_age, description, price, image } = req.body;
+    //Actualizamos los datos
+     await Activity.update(
+      {
+        id : parseInt(activityId),
+      },
+      {
+        title,
+        type,
+        id_details,
+        intensity,
+        minimum_age,
+        description,
+        price,
+        image
+      }
+    );
+
+    //Recuperamos la información actualizada
+    const updatedActivity = await Activity.findOneBy({
+      id: parseInt(activityId)
+    })
+    
+    return res.json ({
+      success: true,
+      message: "Actualizado",
+      data: updatedActivity
+    })
+
 };
 const getActivityById = (req: Request, res: Response) => {
   return res.send("Recuperar actividad por Id");
