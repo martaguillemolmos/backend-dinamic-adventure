@@ -69,7 +69,7 @@ export class CreateTableActivities1702113286550 implements MigrationInterface {
         foreignKeys: [
           {
             columnNames: ["id_details"],
-            referencedTableName: "activity-details",
+            referencedTableName: "details",
             referencedColumnNames: ["id"],
             onDelete: "CASCADE",
           },

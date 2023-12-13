@@ -2,7 +2,7 @@ import "reflect-metadata";
 import 'dotenv/config';
 import { DataSource } from "typeorm";
 import { CreateTableUsers1702113174045 } from "./migration/1702113174045-create-table-users";
-import { CreateTableActivityDetails1702113272646 } from "./migration/1702113272646-create-table-activity-details";
+import { CreateTableActivityDetails1702113272646 } from "./migration/1702113272646-create-table-details";
 import { Users } from "./models/User";
 import { Details } from "./models/Details";
 import { CreateTableActivities1702113286550 } from "./migration/1702113286550-create-table-activities";

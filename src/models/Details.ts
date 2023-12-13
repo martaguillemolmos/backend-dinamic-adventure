@@ -15,7 +15,7 @@ export class Details extends BaseEntity {
     
     @Column({type:"enum", enum: Types})
     @IsEnum(Types)
-    types!:string
+    type!:string
   
     @Column()
     @IsString()
@@ -29,7 +29,7 @@ export class Details extends BaseEntity {
   
     @Column()
     @IsDate()
-    update_at!: Date
+    updated_at!: Date
 
   //Declaramos la relación que existe entre Details y Activity.
   @OneToMany(() => Activity, (activities) => activities.details)
