@@ -336,17 +336,39 @@ const deactivateAccount = async (req: Request, res: Response) => {
     const { is_active } = req.body;
 
     // Validación para comprobar que no nos envían un string vacío o es diferente a false
-    if ( is_active !== undefined && is_active.trim() === "" || is_active !== false) {
+    if ( is_active !== undefined && is_active.trim() === "" || is_active !== "false") {
       return res.status(404).json(`La cuenta no ha sido desactivada.`);
     }
  
+    let accountUser;
     //Comprobamos que el usuario exista
     if (!user) {
       return res.status(403).json({ message: "Usuario no encontrado" });
+    } else {
+    accountUser = await Users.update(
+        {
+          id: req.token.id,
+        },
+        {
+          is_active
+        }
+      );
     }
+    console.log("user", user)
 
-
-
+   if (accountUser){
+    return res.json({
+      succes: true,
+      message: `Enhorabuena ${user.name}, tu cuenta ha sido inactivada con éxito.`,
+  
+    });
+   } else {
+    return res.json({
+      succes: false,
+      message: `${user.name}, tu cuenta no ha sido inactivada.`,
+    });
+   }
+   
 } catch(error) {
   console.log(error);
   return res.json({
@@ -384,4 +406,4 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-export { createUser, loginUser, profileUser, getAllUsers, updateUser, updatePassword };
+export { createUser, loginUser, profileUser, getAllUsers, updateUser, updatePassword, deactivateAccount};
