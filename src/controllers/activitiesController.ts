@@ -89,20 +89,46 @@ const { title, type, id_details, intensity, minimum_age, description, price, ima
     );
 
     //Recuperamos la información actualizada
-    const updatedActivity = await Activity.findOneBy({
+    const updated = await Activity.findOneBy({
       id: parseInt(activityId)
     })
     
     return res.json ({
       success: true,
       message: "Actualizado",
-      data: updatedActivity
+      data: updated
     })
 
 };
-const getActivityById = (req: Request, res: Response) => {
-  return res.send("Recuperar actividad por Id");
-};
+
+//Recuperamos una actividad por el id
+const getActivityById = async(req: Request, res: Response) => {
+  try {
+
+    //Recuperamos el id de la actividad a través del body
+     const activityId = req.body.id;
+    //Comprobamos si existe
+    const activity = await Activity.findOneBy({
+      id: parseInt(activityId)
+    })
+    //Validación
+    if (!activityId){
+      return res.status(403).json("El id no existe.");
+    } 
+
+    return res.json({
+      message: "Información del detalle",
+      data: activity,
+    })
+  } catch (error) {
+    return res.json({
+      succes: false,
+      message: "No se ha podido procesar la solicitud.",
+      error: error,
+    });
+  }
+}
+
 const getActivityByType = (req: Request, res: Response) => {
   return res.send("Recuperar actividad por Type");
 };
