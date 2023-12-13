@@ -185,7 +185,7 @@ const updateUser = async (req: Request, res: Response) => {
       req.token.is_active == true 
     ) {
       //Lógica para actualizar usuarios por su Id. Este lo recuperamos del token.
-       user = await Users.findOne({
+        user = await Users.findOne({
         where: { id: req.token.id },
       });
     } else {
@@ -194,17 +194,17 @@ const updateUser = async (req: Request, res: Response) => {
 
     // Indicamos los datos que se pueden actualizar a través de esta ruta.
     const { name, surname, phone, email} = req.body;
-    
+
     // Validar el formato de los nuevos datos.
     const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     if (email !== undefined && email.trim() !=="" && !emailRegex.test(email) && (email.length == 0 || email.length > 50) ){
       return res.json("Formato de email incorrecto. Recuerda: Número máx. de caracteres 50.")
     }
     if(name !== undefined && name.trim() !=="" && name.length >50) {
-      return res.json ("User: Número máx. de caracteres 50.")
+      return res.json ("Número máx. de caracteres 50.")
     }
     if(surname !== undefined && surname.trim() !=="" && surname.length >50) {
-      return res.json ("User: Número máx. de caracteres 50.")
+      return res.json ("Número máx. de caracteres 50.")
     }
     if(phone !== undefined && (phone >999999999 || phone < 600000000 )){
       return res.json ("Introduce un número de 9 caracteres, puede empezar desde el 6.")
@@ -213,8 +213,20 @@ const updateUser = async (req: Request, res: Response) => {
     //Comprobamos que el usuario exista
     if (!user) {
       return res.status(403).json({ message: "Usuario no encontrado" });
+    } else {
+      await Users.update(
+        {
+          id: req.token.id,
+        },
+        {
+          name,
+          surname,
+          phone,
+          email,
+        }
+      );
     }
-
+   
     return res.json(`Enhorabuena ${user.name}, tu información se ha actualizado con éxito.`);
   } catch (error) {
     console.log("error", error);
@@ -290,6 +302,43 @@ const updatePassword = async (req: Request, res: Response) => {
   }
 };
 
+//Inactivar una cuenta.
+const deactivateAccount = async (req: Request, res: Response) => {
+  try {
+    let user;
+    if (req.token.is_active == true) {
+      //Recuperamos el id del usuario a través del token
+      user = await Users.findOne({
+        where: { id: req.token.id },
+      });
+    } else {
+      return res.status(403).json({ message: "Usuario no autorizado" });
+    }
+   
+    const { is_active } = req.body;
+
+    // Validación para comprobar que no nos envían un string vacío o es diferente a false
+    if ( is_active !== undefined && is_active.trim() === "" || is_active !== false) {
+      return res.status(404).json(`La cuenta no ha sido desactivada.`);
+    }
+ 
+    //Comprobamos que el usuario exista
+    if (!user) {
+      return res.status(403).json({ message: "Usuario no encontrado" });
+    }
+
+
+
+} catch(error) {
+  console.log(error);
+  return res.json({
+    succes: false,
+    message: `La cuenta no ha sido desactivada.`,
+    error: error,
+  });
+
+}};
+
 // Recuperar todos los usuarios
 const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -316,6 +365,5 @@ const getAllUsers = async (req: Request, res: Response) => {
     });
   }
 };
-
 
 export { createUser, loginUser, profileUser, getAllUsers, updateUser, updatePassword };
