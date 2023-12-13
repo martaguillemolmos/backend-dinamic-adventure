@@ -7,7 +7,7 @@ export {router}
 //Crear actividad
 router.post("/", createActivity);
 //Modificar una actividad
-router.post("/updated", updateActivity);
+router.put("/", updateActivity);
 //Recuperar una actividad por el id
 router.get("/", getActivityById);
 //Recuperar las actividades por el Type

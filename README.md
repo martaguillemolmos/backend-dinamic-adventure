@@ -1,3 +1,4 @@
+
 # <h1 align="center">README -  Dinamic Adventure </h1>
 __<p align="center">Proyecto Final - Full Stack Developer Bootcamp en GeeksHubs Academy </p>__
 
@@ -8,7 +9,7 @@ __<p align="center">Proyecto Final - Full Stack Developer Bootcamp en GeeksHubs 
 </p>
 
 
-### 📋 Contenido del Readme
+## 📋 Contenido del Readme
 
 <details> <summary>Accede al contenido del Readme</summary>
 
@@ -27,9 +28,10 @@ __<p align="center">Proyecto Final - Full Stack Developer Bootcamp en GeeksHubs 
 
 ## 🚀 Descripción
 
-Este proyecto del Bootcamp Full Stack está enfocado en backend de una empresa de deportes de aventura llamada Dinamic Adventure, haciendo uso de tecnologías como Node.js, TypeScript, Express, MySQL, GIT y GitHub.  El desarrollo de este proyecto se basa en una base de datos relacional gestionada con TypeORM.
+Este proyecto del Bootcamp Full Stack está enfocado en backend de una empresa de deportes de aventura, haciendo uso de tecnologías como Node.js, TypeScript, Express, MySQL, GIT y GitHub.  El desarrollo de este proyecto se basa en una base de datos relacional gestionada con TypeORM.
  
-La aplicación busca superar las limitaciones actuales de la plataforma, transformándola en una herramienta completa que no solo permite a los usuarios visualizar las actividades, sino que permite reservar y también optimiza la gestión interna, reduciendo significativamente la carga administrativa.El enfoque principal es crear un backend eficiente y escalable que permita a los usuarios visualizar y reservar actividades de manera óptima.
+La aplicación busca superar las limitaciones actuales de la plataforma, transformándola en una herramienta completa que no solo permite a los usuarios visualizar las actividades, sino que permite registrar un usuario, comprobar la disponibilidad, reservar una actividad y como consecuencia, optimiza la gestión interna, reduciendo significativamente la carga administrativa.
+El enfoque principal es crear un backend eficiente y escalable que permita a los usuarios visualizar, comprobar la disponibilidad, registrarse en la plataforma y reservar actividades de manera óptima.
 
 <div align="center">
       <img src="./src/img_readme/plataforma-previa.gif" style="max-width: 100%">
@@ -49,7 +51,7 @@ El proyecto de Dinamic Adventure tiene como objetivo principal desarrollar un si
 
 - **Optimización interna:** Automatizar la gestión de las actividades y estados de las reservas. 
 
-En resumen, el proyecto tiene como objetivo principal la creación de un sistema completo de gestión de actividades para Dinamic Adventure, asegurando una experiencia de usuario intuitiva y segura tanto para clientes como para la empresa.
+En resumen, el proyecto tiene como objetivo principal la creación de un sistema completo de gestión de actividades para la empresa, Dinamic Adventure, asegurando una experiencia de usuario intuitiva y segura tanto para clientes como para la empresa.
 
 
 ## 🛠️ Tecnologías Utilizadas
@@ -83,7 +85,7 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
       <img src="./src/img_readme/reverse-engineer.png" style="max-width: 100%">
    </div>    
    <div align="center">
-    <em>Diseño de base de datos</em>
+    <em>Diseño de la base de datos</em>
     </div>  
 </p>
 
@@ -134,15 +136,243 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
             Auth : User 
             Barer token : Token
  
-        
+4. Modificar los datos del usuario.
+    - Descripción: Modificamos los datos del usuario a través del id que tenemos almacenado en redux.
+
+            PUT localhost:4000/user
+
+        Auth:
+
+            Auth : User 
+            Barer token : Token
        
-4. Obtener todos los usuarios.
+        Body:
+
+            JSON
+            {
+                "name": "Marta",
+                "email": "martaguillem@outlook.es",
+                "surname": "Guillem",
+                "phone": 627840804,              
+            }
+
+> [!NOTE]
+> Estos son todos los campos que podemos modificar de nuestro perfil. No obstante, podemos modificar uno o más campos; no es necesario enviarlos todos para que se procese la solicitud.
+
+5. Modificar el password.
+    - Descripción: Creamos una ruta única para modificar el password. 
+    Antes de realizar la modificación, solicitamos a través del body nueva contraseña y la antigua para comprobar que es la misma que teníamos almacenada en la base de datos y procesar la solicitud.
+
+            PATCH localhost:4000/user/password
+
+        Auth:
+
+            Auth : User 
+            Barer token : Token
+       
+        Body:
+
+            JSON
+            {
+                "password": "1234567",
+                "passwordOld": "123456"             
+            }
+
+> [!NOTE]
+> Antes de realizar la llamada a la base de datos, comprobamos que la nueva contraeña no sea igual a la que queremos modificar, para evitar una llamada inecesaria a la API.
+
+6. Inactivar una cuenta.
+    - Descripción: Hemos creado una ruta única para inactivar la cuenta. Recuperamos el id del usuario a través del token almacenado en redux.
+
+            PUT localhost:4000/user/account
+
+        Auth:
+
+            Auth : User 
+            Barer token : Token
+       
+        Body:
+
+            JSON
+            {
+                "is_active": "false"            
+            }
+
+> [!IMPORTANT]
+> Para poder acceder a todas las rutas que requieren de token, se comprueba previamente si el token está activo o no. En el caso que el usuario inactive la cuenta no podrá acceder a ninguna de esas vistas.
+
+7. Obtener todos los usuarios.
     - Descripción: Obtener los datos de todos los usuarios.
 
             GET localhost:4000/user
 
 </details>
 
+<details>
+<summary>/activity</summary>
+<br>
+
+1. Crear una actividad.
+    - Descripción: Creamos una nueva actividad, recuperando la información de los campos requeridos a través del body.
+
+            POST localhost:4000/activity
+
+        Body:
+
+             JSON
+            {
+                "title": "Rafting",
+                "type": "acuatica",
+                "intensity": "medium",
+                "minimum_age": 9,
+                "description": "La mejor actividad",
+                "price": 30,
+                "image": "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp"
+            }
+        
+2. Recuperar una actividad.
+    - Descripción: Obtenemos una actividad a través del id que obtenemos a través del body.
+
+            POST localhost:4000/activity 
+
+        Body:
+
+             JSON
+            {
+                "id": 1
+            }
+
+3. Recuperamos las actividades según el tipo.
+    - Descripción: Contamos con dos tipos de actividades, terrestres o acuáticas. El tipo de actividad se recupera a través del body.
+
+            GET localhost:4000/activity/type 
+
+        Body:
+
+             JSON
+            {
+                "type": "acuatica"
+            }
+ 
+4. Recuperamos todas las actividades.
+    - Descripción: Recuperamos todas las actividades que tenemos almacenadas en la base de datos sin restricciones.
+
+            GET localhost:4000/activity/all
+
+5. Modificar los datos de la actividad.
+    - Descripción: Modificamos los datos de la actividad a través del id que hemos recuperado a través del body.
+
+            PUT localhost:4000/activity
+       
+        Body:
+
+            JSON
+            {
+                "id": "1",
+                "title": "Rafting de aguas bravas",
+                "type": "acuatica",
+                "intensity": "medium",
+                "minimum_age": 9,
+                "description": "La mejor actividad",
+                "price": 30,
+                "image": "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp"             
+            }
+
+> [!NOTE]
+> Estos son todos los campos que podemos modificar. No obstante, podemos modificar uno o más campos; no es necesario enviarlos todos para que se procese la solicitud.
+
+6. Eliminar una actividad.
+    - Descripción: Eliminamos una actividad por su id, este lo recuperamos a través del body.
+
+            DELETE localhost:4000/activity
+
+        Body:
+
+            JSON
+            {
+                "id": "1"           
+            }
+
+</details>
+
+<details>
+<summary>/details</summary>
+<br>
+
+1. Crear un detalle.
+    - Descripción: Creamos un nuevo detalle, recuperando la información de los campos requeridos a través del body.
+
+            POST localhost:4000/details
+
+        Body:
+
+             JSON
+            {
+                "type": "details",
+                "information": "Soy el detalle de la iformacion, aqui va el primero, flipa"
+            }
+> [!NOTE]
+> En el caso que ya exista un detalle ya en nuestra base de datos con las mismas características no se realizará la solicitud.
+        
+2. Recuperar un detalle.
+    - Descripción: Obtenemos un detalle a través del id que obtenemos a través del body.
+
+            POST localhost:4000/details 
+
+        Body:
+
+             JSON
+            {
+                "id": 1
+            }
+
+3. Recuperamos las actividades según el tipo.
+    - Descripción: Contamos tres tipos; "requiriments", "details", "itinerary". El tipo se recupera a través del body.
+
+            GET localhost:4000/details/type 
+
+        Body:
+
+             JSON
+            {
+                "type": "details"
+            }
+ 
+4. Recuperamos todos los detalles.
+    - Descripción: Recuperamos todos los detalles que tenemos almacenadas en la base de datos sin restricciones.
+
+            GET localhost:4000/details/all
+
+5. Modificar un detalle por el Id.
+    - Descripción: Modificamos los datos del detalle a través del id que hemos recuperado a través del body.
+
+            PUT localhost:4000/details
+       
+        Body:
+
+            JSON
+            {
+                "id": "9",
+                "type": "itinerary",
+                "information": "9.00h Quedamos con vosotros en nuestras instalaciones."
+            }
+
+> [!NOTE]
+> Estos son todos los campos que podemos modificar. No obstante, podemos modificar uno o más campos; no es necesario enviarlos todos para que se procese la solicitud.
+
+6. Eliminar un detalle.
+    - Descripción: Eliminamos un detalle por su id, este lo recuperamos a través del body.
+
+            DELETE localhost:4000/details
+
+        Body:
+
+            JSON
+            {
+                "id": "1"           
+            }
+
+</details>
 
 ## ⚙️ Instrucciones de uso
 
