@@ -5,7 +5,7 @@ import { CreateTableUsers1702113174045 } from "./migration/1702113174045-create-
 import { CreateTableActivityDetails1702113272646 } from "./migration/1702113272646-create-table-details";
 import { Users } from "./models/User";
 import { Details } from "./models/Details";
-import { CreateTableActivities1702113286550 } from "./migration/1702113286550-create-table-activities";
+import { CreateTableActivities1702113286550 } from "./migration/1702113286550-create-table-activity";
 import { CreateTableReviews1702113309706 } from "./migration/1702113309706-create-table-reviews";
 import { CreateTableAppointments1702113318143 } from "./migration/1702113318143-create-table-appointments";
 import { CreateTableBussiness1702113329740 } from "./migration/1702113329740-create-table-bussiness";

@@ -35,7 +35,7 @@ const Intensity = {
 
 const Types = {
   terrestre: "terrestre",
-  acuatica: "acuatica"
+  acuatica: "acuatica",
 };
 
 @Entity()
@@ -73,6 +73,12 @@ export class Activity extends BaseEntity {
   description!: string;
 
   @Column()
+  @IsNumber()
+  @Max(4000)
+  @Min(1)
+  price!: number;
+
+  @Column()
   @IsString()
   @MaxLength(300)
   @MinLength(3)
@@ -88,12 +94,11 @@ export class Activity extends BaseEntity {
 
   @Column()
   @IsDate()
-  update_at!: Date;
+  updated_at!: Date;
 
-  //Declaramos la relación que existe entre Activity y Review
-  @OneToOne(() => Review, (review) => review.activity)
-  @JoinColumn()
-  review!: Review;
+  //Declaramos la relación que existe entre User y la tabla intermedia, Appointment
+  @OneToMany(() => Review, (reviews) => reviews.activity)
+  reviews!: Review[];
 
   //Declaramos la relación que existe entre Activity y la tabla intermedia, Appointment
   @OneToMany(() => Appointment, (appointments) => appointments.activity)

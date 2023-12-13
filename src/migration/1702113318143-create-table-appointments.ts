@@ -68,7 +68,7 @@ export class CreateTableAppointments1702113318143 implements MigrationInterface 
                   },
                 {
                   columnNames: ["id_activity"],
-                  referencedTableName: "activities",
+                  referencedTableName: "activity",
                   referencedColumnNames: ["id"],
                   onDelete: "CASCADE",
                 }

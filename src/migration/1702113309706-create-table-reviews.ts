@@ -58,7 +58,7 @@ export class CreateTableReviews1702113309706 implements MigrationInterface {
                     },
                     {
                       columnNames: ["id_activity"],
-                      referencedTableName: "activities",
+                      referencedTableName: "activity",
                       referencedColumnNames: ["id"],
                       onDelete: "CASCADE",
                     }
