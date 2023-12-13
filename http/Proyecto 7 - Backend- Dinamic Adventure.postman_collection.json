@@ -86,8 +86,17 @@
 				{
 					"name": "Modificar una actividad",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"1\",\r\n    \"title\": \"Rafting de aguas bravas\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:4000/activity/updated",
 							"host": [
@@ -123,7 +132,7 @@
 			]
 		},
 		{
-			"name": "Activity details",
+			"name": "Details",
 			"item": [
 				{
 					"name": "Recuperar todos los detalles de las actividades",
