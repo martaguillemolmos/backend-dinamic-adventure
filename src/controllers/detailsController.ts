@@ -164,8 +164,30 @@ const getDetailsByType = async (req: Request, res: Response) => {
     });
   }};
 
-const getAllDetails = (req: Request, res: Response) => {
-  return res.send("Activity detail");
+const getAllDetails = async(req: Request, res: Response) => {
+  try {
+    // Recuperamos a todos los detalles
+    const details = await Details.find();
+    // Comprobamos si hay detalles registrados.
+    if (details.length == 0) {
+      return res.json({
+        success: true,
+        message: `Actualmente, no hay detalles registrados.`,
+      });
+    } else {
+      return res.json({
+        succes: true,
+        message: "Usuarios registrados.",
+        data: details,
+      });
+    }
+  } catch (error) {
+    return res.json({
+      succes: false,
+      message: "No hemos podido recuperar los usuarios",
+      error: error,
+    });
+  }
 };
 
 const deleteDetailsById = (req: Request, res: Response) => {
