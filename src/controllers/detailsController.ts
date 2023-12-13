@@ -113,8 +113,26 @@ const updateDetailsById = async (req: Request, res: Response) => {
   }
 };
 
-const getDetailsById = (req: Request, res: Response) => {
-  return res.send("Get details by Id");
+const getDetailsById = async(req: Request, res: Response) => {
+  try {
+    //Recuperamos el id del details a través del body
+    const detailsId = req.body.id;
+    //Comprobamos si existe
+    const details = await Details.findOneBy({
+      id: parseInt(detailsId)
+    })
+    //Validación
+    if (!detailsId){
+      return res.status(403).json("El id no existe.");
+    } 
+
+    return res.json({
+      message: "Información del detalle",
+      data: details,
+    })
+  } catch (error) {
+    
+  }
 };
 
 const getDetailsByType = (req: Request, res: Response) => {
