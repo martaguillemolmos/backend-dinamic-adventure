@@ -195,7 +195,7 @@ const getAllDetails = async(req: Request, res: Response) => {
 //Eliminamos un detalle por el Id.
 const deleteDetailsById = async(req: Request, res: Response) => {
   try {
-    //Lógica para eliminar producto por el Id a través del body.
+    //Lógica para eliminar detalle por el Id a través del body.
     const detailsId = req.body.id;
     const detailDelete = await Details.findOneBy({
       id: parseInt(detailsId),

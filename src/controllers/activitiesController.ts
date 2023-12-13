@@ -189,7 +189,28 @@ const getAllActivities = async (req: Request, res: Response) => {
     });
   }
 };
-const deleteActivity = (req: Request, res: Response) => {
-  return res.send("Eliminar actividad");
-};
+const deleteActivity = async(req: Request, res: Response) => {
+  try {
+    //Lógica para eliminar detalle por el Id a través del body.
+    const activityId = req.body.id;
+    const activityDelete = await Activity.findOneBy({
+      id: parseInt(activityId),
+    });
+
+    if(!activityDelete){
+      return res.json ("La actividad no existe")
+    }
+
+    const activityRemoved = await Activity.remove(activityDelete as Activity);
+    if (activityRemoved) {
+      return res.json("Se ha eliminado la actividad correctamente");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha eliminado la actividad",
+      error: error,
+    });
+  }};
 export { getAllActivities, createActivity, updateActivity, getActivityById, getActivityByType, deleteActivity };
