@@ -33,6 +33,11 @@ const Intensity = {
   low: "low",
 };
 
+const Types = {
+  terrestre: "terrestre",
+  acuatica: "acuatica"
+};
+
 @Entity()
 export class Activity extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -43,6 +48,10 @@ export class Activity extends BaseEntity {
   @MaxLength(25)
   @MinLength(3)
   title!: string;
+
+  @Column({ type: "enum", enum: Types })
+  @IsEnum(Types)
+  type!: string;
 
   @Column()
   id_details!: number;

@@ -19,6 +19,12 @@ export class CreateTableActivities1702113286550 implements MigrationInterface {
             length: "25",
           },
           {
+            name: "type",
+            type: "enum",
+            enum: ["terrestre", "acuatica"],
+            default: '"acuatica"'
+        },
+          {
             name: "id_details",
             type: "int",
           },

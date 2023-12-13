@@ -1,7 +1,19 @@
 import { Request, Response, Router } from "express";
-import { getAllActivities } from "../controllers/activitiesController";
+import { createActivity, deleteActivity, getActivityById, getActivityByType, getAllActivities, updateActivity } from "../controllers/activitiesController";
 const router = Router ();
 
 export {router}
 
-router.get("/", getAllActivities);
+//Crear actividad
+router.post("/", createActivity);
+//Modificar una actividad
+router.post("/updated", updateActivity);
+//Recuperar una actividad por el id
+router.get("/", getActivityById);
+//Recuperar las actividades por el Type
+router.get("/type", getActivityByType);
+//Recuperar todas las actividades
+router.get("/all", getAllActivities);
+//Eliminar una actividad
+router.delete("/", deleteActivity);
+

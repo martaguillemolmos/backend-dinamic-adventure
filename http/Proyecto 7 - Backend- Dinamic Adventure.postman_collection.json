@@ -15,6 +15,99 @@
 						"method": "GET",
 						"header": [],
 						"url": {
+							"raw": "localhost:4000/activity/all",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"activity",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar una actividad por el Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/activity",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"activity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar una actividad por el Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/activity/type",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"activity",
+								"type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear una actividad",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/activity",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"activity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar una actividad",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/activity/updated",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"activity",
+								"updated"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar una actividad",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
 							"raw": "localhost:4000/activity",
 							"host": [
 								"localhost"
