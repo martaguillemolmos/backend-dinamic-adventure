@@ -142,6 +142,13 @@ const getActivityByType = async(req: Request, res: Response) => {
     if (!typeBody){
       return res.status(403).json(`No existe ninguna actividad con este type.`);
     } 
+
+    if (activity.length == 0) {
+      return res.json({
+        success: true,
+        message: `Actualmente, no hay actividades registradas con ese type.`,
+      });
+    }
     return res.json({
       message: "Información de las actividades.",
       data: activity,
@@ -155,8 +162,32 @@ const getActivityByType = async(req: Request, res: Response) => {
   }
 
 };
-const getAllActivities = (req: Request, res: Response) => {
-  return res.send("Recuperar todas las actividades");
+
+//Recuperamos todas las actividades
+const getAllActivities = async (req: Request, res: Response) => {
+  try {
+    // Recuperamos a todos los detalles
+    const activities = await Activity.find();
+    // Comprobamos si hay detalles registrados.
+    if (activities.length == 0) {
+      return res.json({
+        success: true,
+        message: `Actualmente, no hay actividades registradas.`,
+      });
+    } else {
+      return res.json({
+        succes: true,
+        message: "Todas las actividades",
+        data: activities,
+      });
+    }
+  } catch (error) {
+    return res.json({
+      succes: false,
+      message: "No hemos podido recuperar las actividades.",
+      error: error,
+    });
+  }
 };
 const deleteActivity = (req: Request, res: Response) => {
   return res.send("Eliminar actividad");
