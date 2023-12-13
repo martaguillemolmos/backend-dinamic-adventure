@@ -181,11 +181,9 @@ const profileUser = async (req: any, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     let user;
-    if (   
-      req.token.is_active == true 
-    ) {
+    if (req.token.is_active == true) {
       //Lógica para actualizar usuarios por su Id. Este lo recuperamos del token.
-        user = await Users.findOne({
+      user = await Users.findOne({
         where: { id: req.token.id },
       });
     } else {
@@ -193,29 +191,39 @@ const updateUser = async (req: Request, res: Response) => {
     }
 
     // Indicamos los datos que se pueden actualizar a través de esta ruta.
-    const { name, surname, phone, email} = req.body;
+    const { name, surname, phone, email } = req.body;
 
     // Validar el formato de los nuevos datos.
-    const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if (email !== undefined && email.trim() !=="" && !emailRegex.test(email) && (email.length == 0 || email.length > 50) ){
-      return res.json("Formato de email incorrecto. Recuerda: Número máx. de caracteres 50.")
+    const emailRegex =
+      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    if (
+      email !== undefined &&
+      email.trim() !== "" &&
+      !emailRegex.test(email) &&
+      (email.length == 0 || email.length > 50)
+    ) {
+      return res.json(
+        "Formato de email incorrecto. Recuerda: Número máx. de caracteres 50."
+      );
     }
-    if(name !== undefined && name.trim() !=="" && name.length >50) {
-      return res.json ("Número máx. de caracteres 50.")
+    if (name !== undefined && name.trim() !== "" && name.length > 50) {
+      return res.json("Número máx. de caracteres 50.");
     }
-    if(surname !== undefined && surname.trim() !=="" && surname.length >50) {
-      return res.json ("Número máx. de caracteres 50.")
+    if (surname !== undefined && surname.trim() !== "" && surname.length > 50) {
+      return res.json("Número máx. de caracteres 50.");
     }
-    if(phone !== undefined && (phone >999999999 || phone < 600000000 )){
-      return res.json ("Introduce un número de 9 caracteres, puede empezar desde el 6.")
+    if (phone !== undefined && (phone > 999999999 || phone < 600000000)) {
+      return res.json(
+        "Introduce un número de 9 caracteres, puede empezar desde el 6."
+      );
     }
-   
+
     let updatedUser;
     //Comprobamos que el usuario exista
     if (!user) {
       return res.status(403).json({ message: "Usuario no encontrado" });
     } else {
-     await Users.update(
+      await Users.update(
         {
           id: req.token.id,
         },
@@ -227,25 +235,24 @@ const updateUser = async (req: Request, res: Response) => {
         }
       );
     }
-    console.log("user", user)
+    console.log("user", user);
 
     updatedUser = await Users.findOne({
-      where: {id : req.token.id},
-    })
-    
-   if (updatedUser){
-    return res.json({
-      succes: true,
-      message: `Enhorabuena ${updatedUser.name}, tu información se ha actualizado con éxito.`,
-      data: updatedUser,
+      where: { id: req.token.id },
     });
-   } else {
-    return res.json({
-      succes: false,
-      message: `${user.name}, no se ha podido actualizar la información.`,
-    });
-   }
-   
+
+    if (updatedUser) {
+      return res.json({
+        succes: true,
+        message: `Enhorabuena ${updatedUser.name}, tu información se ha actualizado con éxito.`,
+        data: updatedUser,
+      });
+    } else {
+      return res.json({
+        succes: false,
+        message: `${user.name}, no se ha podido actualizar la información.`,
+      });
+    }
   } catch (error) {
     console.log("error", error);
     return res.json({
@@ -269,19 +276,28 @@ const updatePassword = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Usuario no autorizado" });
     }
 
-    const passwordRegex = /^[a-zA-Z0-9]+$/
+    const passwordRegex = /^[a-zA-Z0-9]+$/;
     const { password, passwordOld } = req.body;
 
     // Validación para comprobar que no nos envían un string vacío.
-    if ( password !== undefined && password.trim() === "" || passwordOld !== undefined && passwordOld.trim() === "") {
-      return res.status(404).json("La contraseña debe contener de 6 a 12 caracteres");
+    if (
+      (password !== undefined && password.trim() === "") ||
+      (passwordOld !== undefined && passwordOld.trim() === "")
+    ) {
+      return res
+        .status(404)
+        .json("La contraseña debe contener de 6 a 12 caracteres");
     }
-   if (!passwordRegex.test(password)){
-    return res.status(404).json("La contraseña no puede contener caracteres especiales.")
-   }
+    if (!passwordRegex.test(password)) {
+      return res
+        .status(404)
+        .json("La contraseña no puede contener caracteres especiales.");
+    }
     // Validación que el password contiene como mínimo y como máximo.
-    if(passwordOld.length < 6 || passwordOld.length >12) {
-      return res.status(404).json("La contraseña debe contener de 6 a 12 caracteres.")
+    if (passwordOld.length < 6 || passwordOld.length > 12) {
+      return res
+        .status(404)
+        .json("La contraseña debe contener de 6 a 12 caracteres.");
     }
     //Comprobamos que el usuario exista
     if (!user) {
@@ -299,7 +315,9 @@ const updatePassword = async (req: Request, res: Response) => {
             password: encryptedPassword,
           }
         );
-        return res.status(202).json(`${user.name}, la contraseña ha sido modificada`);
+        return res
+          .status(202)
+          .json(`${user.name}, la contraseña ha sido modificada`);
       } else {
         return res.status(401).json({
           message: "La contraseña no coincide, vuelva a intentarlo.",
@@ -332,52 +350,53 @@ const deactivateAccount = async (req: Request, res: Response) => {
     } else {
       return res.status(403).json({ message: "Usuario no autorizado" });
     }
-   
+
     const { is_active } = req.body;
 
     // Validación para comprobar que no nos envían un string vacío o es diferente a false
-    if ( is_active !== undefined && is_active.trim() === "" || is_active !== "false") {
+    if (
+      (is_active !== undefined && is_active.trim() === "") ||
+      is_active !== "false"
+    ) {
       return res.status(404).json(`La cuenta no ha sido desactivada.`);
     }
- 
+
     let accountUser;
     //Comprobamos que el usuario exista
     if (!user) {
       return res.status(403).json({ message: "Usuario no encontrado" });
     } else {
-    accountUser = await Users.update(
+      accountUser = await Users.update(
         {
           id: req.token.id,
         },
         {
-          is_active
+          is_active,
         }
       );
     }
-    console.log("user", user)
+    console.log("user", user);
 
-   if (accountUser){
-    return res.json({
-      succes: true,
-      message: `Enhorabuena ${user.name}, tu cuenta ha sido inactivada con éxito.`,
-  
-    });
-   } else {
+    if (accountUser) {
+      return res.json({
+        succes: true,
+        message: `Enhorabuena ${user.name}, tu cuenta ha sido inactivada con éxito.`,
+      });
+    } else {
+      return res.json({
+        succes: false,
+        message: `${user.name}, tu cuenta no ha sido inactivada.`,
+      });
+    }
+  } catch (error) {
+    console.log(error);
     return res.json({
       succes: false,
-      message: `${user.name}, tu cuenta no ha sido inactivada.`,
+      message: `La cuenta no ha sido desactivada.`,
+      error: error,
     });
-   }
-   
-} catch(error) {
-  console.log(error);
-  return res.json({
-    succes: false,
-    message: `La cuenta no ha sido desactivada.`,
-    error: error,
-  });
-
-}};
+  }
+};
 
 // Recuperar todos los usuarios
 const getAllUsers = async (req: Request, res: Response) => {
@@ -406,4 +425,12 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-export { createUser, loginUser, profileUser, getAllUsers, updateUser, updatePassword, deactivateAccount};
+export {
+  createUser,
+  loginUser,
+  profileUser,
+  getAllUsers,
+  updateUser,
+  updatePassword,
+  deactivateAccount,
+};
