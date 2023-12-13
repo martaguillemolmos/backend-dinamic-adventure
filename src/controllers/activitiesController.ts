@@ -12,7 +12,6 @@ const createActivity = async(req: Request, res: Response) => {
     const ActivityValidate = new Activity();
     ActivityValidate.title = title.trim();
     ActivityValidate.type = "terrestre", "acuatica";
-    ActivityValidate.id_details = id_details.trim();
     ActivityValidate.intensity = "high", "medium", "low";
     ActivityValidate.minimum_age = minimum_age;
     ActivityValidate.description = description.trim();
@@ -35,7 +34,6 @@ const createActivity = async(req: Request, res: Response) => {
     const newActivity = await Activity.create({
       title: title.trim(),
       type,
-      id_details: id_details.trim(),
       intensity,
       minimum_age,
       description: description.trim(),
@@ -79,7 +77,6 @@ const { title, type, id_details, intensity, minimum_age, description, price, ima
       {
         title,
         type,
-        id_details,
         intensity,
         minimum_age,
         description,

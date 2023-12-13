@@ -26,6 +26,7 @@ import { Users } from "./User";
 import { Appointment } from "./Appointment";
 import { Details } from "./Details";
 import { Review } from "./Review";
+import { Activity_Details } from "./Activity_Details";
 
 const Intensity = {
   high: "high",
@@ -52,9 +53,6 @@ export class Activity extends BaseEntity {
   @Column({ type: "enum", enum: Types })
   @IsEnum(Types)
   type!: string;
-
-  @Column()
-  id_details!: number;
 
   @Column({ type: "enum", enum: Intensity })
   @IsEnum(Intensity)
@@ -119,8 +117,23 @@ export class Activity extends BaseEntity {
   })
   activitiesUsers!: Users[];
 
-  //Declaramos la relación que existe entre esta tabla y Details.
-  @ManyToOne(() => Details, (details) => details.activities)
-  @JoinColumn({ name: "id_details" })
-  details!: Details;
+   //Declaramos la relación que existe entre Activity y la tabla intermedia, Activity_Details
+   @OneToMany(() => Activity_Details, (activity_details) => activity_details.activity)
+   activity_details!: Activity_Details[];
+
+    //Declaramos la relación muchos a muchos entre Details y Activity
+    @ManyToMany(() => Details)
+    @JoinTable({
+      name: "activity-details",
+      joinColumn: {
+        name: "id_activity",
+        referencedColumnName: "id",
+      },
+      inverseJoinColumn: {
+        name: "id_details",
+        referencedColumnName: "id",
+      },
+    })
+    activitiesDetails!: Details[];
+  
 }
