@@ -13,8 +13,8 @@ import { CreateTableActivity1702494395746 } from "./migration/1702494395746-crea
 import { CreateTableActivityDetails1702494436206 } from "./migration/1702494436206-create-table-activity-details";
 import { CreateTableReviews1702494569385 } from "./migration/1702494569385-create-table-reviews";
 import { CreateTableAppointments1702494599358 } from "./migration/1702494599358-create-table-appointments";
-import { CreateTableBussiness1702494632346 } from "./migration/1702494632346-create-table-bussiness";
 import { Activity_Details } from "./models/Activity_Details";
+import { CreateTableBussiness1702494632346 } from "./migration/1702494632346-create-table-bussiness";
 
 
 

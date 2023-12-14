@@ -42,5 +42,5 @@ export class Bussiness extends BaseEntity{
   
     @Column()
     @IsDate()
-    update_at!: Date
+    updated_at!: Date
 }
