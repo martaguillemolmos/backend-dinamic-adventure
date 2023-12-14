@@ -139,17 +139,17 @@ const getBussinessById = async (req: Request, res: Response) => {
     const bussinessId = req.body.id;
     //Comprobamos si existe
     const bussiness = await Bussiness.findOneBy({
-      id: parseInt(bussinessId)
-    })
+      id: parseInt(bussinessId),
+    });
     //Validación
-    if (!bussinessId){
+    if (!bussinessId) {
       return res.status(403).json("El id no existe.");
-    } 
+    }
 
     return res.json({
       message: "Información",
       data: bussiness,
-    })
+    });
   } catch (error) {
     return res.json({
       succes: false,
@@ -192,11 +192,13 @@ const deleteBussiness = async (req: Request, res: Response) => {
       id: parseInt(bussinessId),
     });
 
-    if(!bussinessDelete){
-      return res.json ("El id no existe")
+    if (!bussinessDelete) {
+      return res.json("El id no existe");
     }
 
-    const bussinessRemoved = await Bussiness.remove(bussinessDelete as Bussiness);
+    const bussinessRemoved = await Bussiness.remove(
+      bussinessDelete as Bussiness
+    );
     if (bussinessRemoved) {
       return res.json("Se ha eliminado correctamente");
     }
