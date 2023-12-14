@@ -57,8 +57,63 @@ const createActivity_Details = async(req: Request, res: Response) => {
     });
   }
 };
-const updateActivity_Details = (req: Request, res: Response) => {
-  return res.send("Update");
+
+//Modificar 
+const updateActivity_Details = async(req: Request, res: Response) => {
+  try {
+    //Recuperamos el id 
+    const activity_DetailsId = req.body.id;
+    //Comprobamos que el id exista
+    const existActivity_Details = await Activity_Details.findOneBy({
+      id: parseInt(activity_DetailsId)
+    })
+    if (!existActivity_Details){
+      return res.json ("El id no existe")
+    }
+
+    //Recuperamos la información que van a modificar
+    const { id_details, id_activity } = req.body;
+    console.log(req.body, "soy el body")
+
+        // Validamos que id_details sea un número y no sea undefined
+        if (typeof id_details !== 'number' || id_details === undefined ) {
+          return res.json({
+            success: false,
+            message: "El campo id_details debe ser un número y no puede ser undefined.",
+          });
+        }
+    
+        // Validamos que id_activity sea un número y no sea undefined
+        if (typeof id_activity !== 'number' || id_activity === undefined ) {
+          return res.json({
+            success: false,
+            message: "El campo id_activity debe ser un número y no puede ser undefined.",
+          });
+        }
+    //Actualizamos los datos
+   await Activity_Details.update(
+      {
+        id : parseInt(activity_DetailsId),
+      },
+      {
+        id_details,
+        id_activity
+      }
+    );
+    return res.json ({
+      success: true,
+      message: "Actualizado",
+    })
+   
+
+  } catch (error) {
+    console.log("error", error);
+    return res.json({
+      succes: false,
+      message: `No se ha podido actualizar la información.`,
+      error: error,
+    });
+  }
 };
 const getActivity_DetailsById = (req: Request, res: Response) => {
   return res.send("By Id");
