@@ -20,7 +20,7 @@ app.use (cors());
 app.use ('/user', routerUser);
 app.use ('/activity', routerActivity);
 app.use ('/details', routerDetails);
-app.use ('activity_details', routerActivity_Details);
+app.use ('/activity_details', routerActivity_Details);
 app.use ('/appointment', routerAppointment);
 app.use ('/review', routerReview);
 app.use ('/bussiness', routerBussiness);

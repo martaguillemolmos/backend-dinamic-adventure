@@ -11,6 +11,6 @@ router.put("/", updateAppointment);
 //Recuperar por el id
 router.get("/", getAppointmentById);
 //Recuperar todas 
-router.get("/", getAllApointments);
+router.get("/all", getAllApointments);
 //Eliminar 
 router.delete("/", deleteAppointment);
