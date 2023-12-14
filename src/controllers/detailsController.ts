@@ -163,7 +163,8 @@ const getDetailsByType = async (req: Request, res: Response) => {
       message: "No se ha podido procesar la solicitud.",
       error: error,
     });
-  }};
+  }
+};
 
 //Recuperamos todos los detalles.
 const getAllDetails = async(req: Request, res: Response) => {

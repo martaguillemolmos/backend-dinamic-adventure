@@ -142,8 +142,30 @@ const getActivity_DetailsById = async(req: Request, res: Response) => {
     });
   }};
 
-const getAllActivity_Details = (req: Request, res: Response) => {
-  return res.send("All");
+const getAllActivity_Details = async(req: Request, res: Response) => {
+  try {
+    // Recuperamos a todos los detalles
+    const activity_Details = await Activity_Details.find();
+    // Comprobamos si hay detalles registrados.
+    if (activity_Details.length == 0) {
+      return res.json({
+        success: true,
+        message: `Actualmente, no hay registrados.`,
+      });
+    } else {
+      return res.json({
+        succes: true,
+        message: "Datos de todos",
+        data: activity_Details,
+      });
+    }
+  } catch (error) {
+    return res.json({
+      succes: false,
+      message: "No hemos podido recuperar la información",
+      error: error,
+    });
+  }
 };
 const deleteActivity_Details = (req: Request, res: Response) => {
   return res.send("Delete");
