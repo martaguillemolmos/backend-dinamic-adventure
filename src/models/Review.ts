@@ -53,7 +53,7 @@ export class Review extends BaseEntity {
 
   @Column()
   @IsDate()
-  update_at!: Date;
+  updated_at!: Date;
 
   //Declaramos la relación que existe entre esta tabla y Users.
   @ManyToOne(() => Users, (users) => users.reviews)

@@ -3,6 +3,7 @@ import { Activity_Details } from "../models/Activity_Details";
 import dayjs from "dayjs";
 import { validate } from "class-validator";
 
+//Crear
 const createActivity_Details = async(req: Request, res: Response) => {
   try {
     //Recuperamos la información que nos envían desde el body
