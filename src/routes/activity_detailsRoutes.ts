@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import {Router } from "express";
 import { createActivity_Details, deleteActivity_Details, getActivity_DetailsById, getAllActivity_Details, updateActivity_Details } from "../controllers/acitivity_detailsController";
 const router = Router ();
 
