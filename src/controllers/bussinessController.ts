@@ -158,9 +158,32 @@ const getBussinessById = async (req: Request, res: Response) => {
     });
   }
 };
-const getAllBussiness = (req: Request, res: Response) => {
-  return res.send("All");
+const getAllBussiness = async (req: Request, res: Response) => {
+  try {
+    // Recuperamos a todos los detalles
+    const bussiness = await Bussiness.find();
+    // Comprobamos si hay detalles registrados.
+    if (bussiness.length == 0) {
+      return res.json({
+        success: true,
+        message: `Actualmente, no hay registrados.`,
+      });
+    } else {
+      return res.json({
+        succes: true,
+        message: "Empresas registradas",
+        data: bussiness,
+      });
+    }
+  } catch (error) {
+    return res.json({
+      succes: false,
+      message: "No hemos podido recuperar la información",
+      error: error,
+    });
+  }
 };
+
 const deleteBussiness = (req: Request, res: Response) => {
   return res.send("Delete");
 };
