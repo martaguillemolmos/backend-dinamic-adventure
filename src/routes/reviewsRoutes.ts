@@ -1,7 +1,17 @@
-import { Request, Response, Router } from "express";
-import { getAllReviews } from "../controllers/reviewsController";
+import {  Router } from "express";
+import { createReview, deleteReview, getAllReviews, getReviewById, updateReview } from "../controllers/reviewsController";
 const router = Router ();
 
 export {router}
 
-router.get("/", getAllReviews);
+//Crear 
+router.post("/", createReview);
+//Modificar 
+router.put("/", updateReview);
+//Recuperar por el id
+router.get("/", getReviewById);
+//Recuperar todas 
+router.get("/all", getAllReviews);
+//Eliminar 
+router.delete("/", deleteReview);
+

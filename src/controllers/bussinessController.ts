@@ -1,9 +1,23 @@
 import { Request, Response } from "express"
 
-const getAllBussiness = (req: Request, res: Response) => {
-    return res.send("Bussiness")
-    }
+const createBussiness = (req: Request, res: Response) => {
+    return res.send("Create");
+  };
+  const updateBussiness = (req: Request, res: Response) => {
+    return res.send("Update");
+  };
+  const getBussinessById = (req: Request, res: Response) => {
+    return res.send("By Id");
+  };
+  
+  const getAllBussiness = (req: Request, res: Response) => {
+    return res.send("All");
+  };
+  const deleteBussiness = (req: Request, res: Response) => {
+    return res.send("Delete");
+  };
+
 
 export {
-    getAllBussiness
+    createBussiness, updateBussiness, getBussinessById, getAllBussiness, deleteBussiness
 }
