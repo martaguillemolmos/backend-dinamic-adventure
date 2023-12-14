@@ -11,7 +11,7 @@ const createDetails = async (req: Request, res: Response) => {
 
     //Creamos un objeto para la validación
     const Detailsvalidate = new Details();
-    (Detailsvalidate.type = "requiriments"), "details", "itinerary";
+    Detailsvalidate.type = "requiriments", "details", "itinerary";
     Detailsvalidate.information = information.trim();
     Detailsvalidate.updated_at = new Date(
       dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")

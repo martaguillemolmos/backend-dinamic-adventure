@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { Details } from "./Details";
 import { Activity } from "./Activity";
+import { IsDate } from "class-validator";
 
 @Entity()
 export class Activity_Details extends BaseEntity {
@@ -19,6 +20,14 @@ export class Activity_Details extends BaseEntity {
 
   @Column()
   id_activity!: number;
+
+  @Column()
+  @IsDate()
+  created_at!: Date;
+
+  @Column()
+  @IsDate()
+  updated_at!: Date;
 
   //Declaramos la relación que existe entre esta tabla y Users.
   @ManyToOne(() => Details, (details) => details.activity_details)
