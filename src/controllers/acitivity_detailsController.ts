@@ -115,9 +115,32 @@ const updateActivity_Details = async(req: Request, res: Response) => {
     });
   }
 };
-const getActivity_DetailsById = (req: Request, res: Response) => {
-  return res.send("By Id");
-};
+
+//Recuperamos por el Id
+const getActivity_DetailsById = async(req: Request, res: Response) => {
+  try {
+    //Recuperamos el id a través del body
+    const activity_DetailsId = req.body.id;
+    //Comprobamos si existe
+    const activity_details = await Activity_Details.findOneBy({
+      id: parseInt(activity_DetailsId)
+    })
+    //Validación
+    if (!activity_DetailsId){
+      return res.status(403).json("El id no existe.");
+    } 
+
+    return res.json({
+      message: "Información",
+      data: activity_details,
+    })
+  } catch (error) {
+    return res.json({
+      succes: false,
+      message: "No se ha podido procesar la solicitud.",
+      error: error,
+    });
+  }};
 
 const getAllActivity_Details = (req: Request, res: Response) => {
   return res.send("All");
