@@ -184,8 +184,30 @@ const getAllBussiness = async (req: Request, res: Response) => {
   }
 };
 
-const deleteBussiness = (req: Request, res: Response) => {
-  return res.send("Delete");
+const deleteBussiness = async (req: Request, res: Response) => {
+  try {
+    //Lógica para eliminar detalle por el Id a través del body.
+    const bussinessId = req.body.id;
+    const bussinessDelete = await Bussiness.findOneBy({
+      id: parseInt(bussinessId),
+    });
+
+    if(!bussinessDelete){
+      return res.json ("El id no existe")
+    }
+
+    const bussinessRemoved = await Bussiness.remove(bussinessDelete as Bussiness);
+    if (bussinessRemoved) {
+      return res.json("Se ha eliminado correctamente");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha eliminado.",
+      error: error,
+    });
+  }
 };
 
 export {
