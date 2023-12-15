@@ -186,6 +186,7 @@ const getAllActivities = async (req: Request, res: Response) => {
     });
   }
 };
+
 const deleteActivity = async(req: Request, res: Response) => {
   try {
     //Lógica para eliminar detalle por el Id a través del body.
