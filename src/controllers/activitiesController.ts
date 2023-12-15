@@ -130,13 +130,13 @@ const getActivityById = async(req: Request, res: Response) => {
 const getActivityByType = async(req: Request, res: Response) => {
   try {
     //Recuperamos el id del details a través del body
-    const typeBody = req.body.type;
+    const typeParams = req.params.type;
     //Comprobamos si existe
     const activity = await Activity.find({
-      where : {type: typeBody},
+      where : {type: typeParams},
     })
     //Validación
-    if (!typeBody){
+    if (!typeParams){
       return res.status(403).json(`No existe ninguna actividad con este type.`);
     } 
 

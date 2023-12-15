@@ -11,7 +11,7 @@ router.put("/", updateActivity);
 //Recuperar una actividad por el id
 router.get("/", getActivityById);
 //Recuperar las actividades por el Type
-router.get("/type", getActivityByType);
+router.get("/:type", getActivityByType);
 //Recuperar todas las actividades
 router.get("/all", getAllActivities);
 //Eliminar una actividad
