@@ -9,6 +9,7 @@ import {
   IsBoolean,
   IsEnum,
   IsDate,
+  IsBase64,
 } from "class-validator";
 import {
   BaseEntity,
@@ -76,11 +77,9 @@ export class Activity extends BaseEntity {
   @Min(1)
   price!: number;
 
-  @Column()
-  @IsString()
-  @MaxLength(300)
-  @MinLength(3)
-  image!: string;
+  @Column({ type: 'blob' })
+  @IsBase64()
+  image!: Buffer;
 
   @Column({ default: true })
   @IsBoolean()

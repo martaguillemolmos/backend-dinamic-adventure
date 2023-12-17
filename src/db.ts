@@ -15,6 +15,7 @@ import { CreateTableReviews1702494569385 } from "./migration/1702494569385-creat
 import { CreateTableAppointments1702494599358 } from "./migration/1702494599358-create-table-appointments";
 import { Activity_Details } from "./models/Activity_Details";
 import { CreateTableBussiness1702494632346 } from "./migration/1702494632346-create-table-bussiness";
+import { CreateTableChangeColumnType1702825947807 } from "./migration/1702825947807-create-table-changeColumnType";
 
 
 
@@ -29,7 +30,7 @@ const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   entities: [Users, Details, Activity, Activity_Details, Appointment, Review, Bussiness],
-  migrations: [CreateTableUsers1702113174045, CreateTableDetails1702493556666, CreateTableActivity1702494395746, CreateTableActivityDetails1702494436206, CreateTableReviews1702494569385, CreateTableAppointments1702494599358, CreateTableBussiness1702494632346],
+  migrations: [CreateTableUsers1702113174045, CreateTableDetails1702493556666, CreateTableActivity1702494395746, CreateTableActivityDetails1702494436206, CreateTableReviews1702494569385, CreateTableAppointments1702494599358, CreateTableBussiness1702494632346, CreateTableChangeColumnType1702825947807],
   synchronize: false,
   logging: false,
 });
