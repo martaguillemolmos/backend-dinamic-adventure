@@ -74,18 +74,23 @@ const createAppointment = async (req: Request, res: Response) => {
         console.log("soy el total de participantes", totalParticipants);
 
         if(totalParticipants < 12){
-          const newAppointment = await Appointment.create({
-            id_user: req.token.id,
-            id_activity: activity,
-            participants,
-            price: existActivity.price,
-            date: date_activity,
-          }).save();
-          console.log(newAppointment, "soy newAppointment?");
-          if (newAppointment) {
-            return res.json("se ha creado el newAppointment");
+          if ( totalParticipants + participants <= 12){
+            const newAppointment = await Appointment.create({
+              id_user: req.token.id,
+              id_activity: activity,
+              participants,
+              price: existActivity.price,
+              date: date_activity,
+            }).save();
+            console.log(newAppointment, "soy newAppointment?");
+            if (newAppointment) {
+              return res.json("se ha creado el newAppointment");
+            }
+            return res.json("No se ha creado la cita.");
+          } else {
+            return res.json (`No hay ${participants} plazas disponibles para esa fecha.`)
           }
-          return res.json("No se ha creado la cita.");
+        
         } else {
           return res.json ("No hay disponibilidad")
         }
