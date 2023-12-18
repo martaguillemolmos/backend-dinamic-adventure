@@ -6,7 +6,11 @@ import { Appointment } from "../models/Appointment";
 
 const createAppointment = async (req: Request, res: Response) => {
   try {
-    if ((req.token.role == "user", "admin", "super_admin" && req.token.is_active == true)) {
+    if (
+      (req.token.role == "user",
+      "admin",
+      "super_admin" && req.token.is_active == true)
+    ) {
       const user = await Users.findOne({
         where: { id: req.token.id },
       });
@@ -80,8 +84,8 @@ const createAppointment = async (req: Request, res: Response) => {
             if (newAppointment) {
               return res.json({
                 message: "se ha creado el newAppointment",
-              data: newAppointment
-            });
+                data: newAppointment,
+              });
             }
             return res.json("No se ha creado la cita.");
           } else {
@@ -94,11 +98,11 @@ const createAppointment = async (req: Request, res: Response) => {
                 status_appointment: "pending",
                 date: date_activity,
               }).save();
-              return res.json ({
-                message: "No completamos el grupo mínimo, nos pondremos en contacto contigo si llegamos al mínimo.",
+              return res.json({
+                message:
+                  "No completamos el grupo mínimo, nos pondremos en contacto contigo si llegamos al mínimo.",
                 data: newAppointment,
-              })
-          
+              });
             }
           }
         } else {
@@ -119,39 +123,40 @@ const createAppointment = async (req: Request, res: Response) => {
   }
 };
 
-const updateAppointment = (req: Request, res: Response) => {
-  return res.send("Update");
-};
-
 const getAppointmentByUser = async (req: Request, res: Response) => {
   try {
-    if ((req.token.role == "user", "admin", "super_admin" && req.token.is_active == true)) {
+    if (
+      (req.token.role == "user",
+      "admin",
+      "super_admin" && req.token.is_active == true)
+    ) {
       //Recuperar el id del usuario por su token
       const user = await Users.findOne({
         where: { id: req.token.id },
-    }
-      );
-      console.log(user, "user")
+      });
+      console.log(user, "user");
 
       if (!user) {
         return res.json("El usuario no existe.");
       }
 
       const appointments = await Appointment.find({
-        where: { id_user: user.id},
-        relations: ["activity"]
+        where: { id_user: user.id },
+        relations: ["activity"],
       });
 
-      console.log(appointments, "son todas las citas del usuario")
+      console.log(appointments, "son todas las citas del usuario");
 
       if (appointments.length === 0) {
         return res.json("Actualmente no existen citas para este usuario.");
       }
 
-      const result = appointments.map(({id_activity,activity, ...appointment }) => ({
-        ...appointment,
-        activity_name: activity.title,
-      }));
+      const result = appointments.map(
+        ({ id_activity, activity, ...appointment }) => ({
+          ...appointment,
+          activity_name: activity.title,
+        })
+      );
 
       return res.json(result);
     } else {
@@ -167,29 +172,29 @@ const getAppointmentByUser = async (req: Request, res: Response) => {
   }
 };
 
-const getApointmentsByDate = async(req: Request, res: Response) => {
+const getApointmentsByDate = async (req: Request, res: Response) => {
   try {
+    const dateBody = req.body.date;
 
-      const dateBody = req.body.date;
+    const appointments = await Appointment.find({
+      where: { date: dateBody },
+      relations: ["activity"],
+    });
 
-      const appointments = await Appointment.find({
-        where: { date: dateBody},
-        relations: ["activity"]
-      });
+    console.log(appointments, "son todas las en esa fecha");
 
-      console.log(appointments, "son todas las en esa fecha")
+    if (appointments.length === 0) {
+      return res.json(`Actualmente no existen citas para el día: ${dateBody}.`);
+    }
 
-      if (appointments.length === 0) {
-        return res.json(`Actualmente no existen citas para el día: ${dateBody}.`);
-      }
-
-      const result = appointments.map(({id_activity,activity, ...appointment }) => ({
+    const result = appointments.map(
+      ({ id_activity, activity, ...appointment }) => ({
         ...appointment,
         activity_name: activity.title,
-      }));
+      })
+    );
 
-      return res.json(result);
-    
+    return res.json(result);
   } catch (error) {
     console.log(error);
     return res.json({
@@ -200,11 +205,9 @@ const getApointmentsByDate = async(req: Request, res: Response) => {
   }
 };
 
-const getAllApointments = async(req: Request, res: Response) => {
+const getAllApointments = async (req: Request, res: Response) => {
   try {
-    // Recuperamos a todos los usuarios
     const appointments = await Appointment.find();
-    // Comprobamos si hay usuarios registrados.
     if (appointments.length == 0) {
       return res.json({
         success: true,
@@ -226,6 +229,39 @@ const getAllApointments = async(req: Request, res: Response) => {
   }
 };
 
+const statusAppointment = async (req: Request, res: Response) => {
+  try {
+    const {id_appointment, status_appointment} = req.body;
+
+    const appointment = await Appointment.findOne({
+      where: { id: id_appointment },
+    });
+
+    if (!appointment) {
+      return res.json("El appointment no existe");
+    }
+    await Appointment.update(
+      {
+        id: id_appointment,
+      },
+      {
+        status_appointment,
+      }
+    );
+    return res.json(appointment);
+  } catch (error) {
+    return res.json({
+      succes: false,
+      message: "No hemos podido modificar la cita",
+      error: error,
+    });
+  }
+};
+
+const updateAppointment = (req: Request, res: Response) => {
+  return res.send("Update");
+};
+
 const deleteAppointment = (req: Request, res: Response) => {
   return res.send("Delete");
 };
@@ -235,5 +271,7 @@ export {
   createAppointment,
   updateAppointment,
   getAppointmentByUser,
-  deleteAppointment, getApointmentsByDate
+  deleteAppointment,
+  getApointmentsByDate,
+  statusAppointment,
 };
