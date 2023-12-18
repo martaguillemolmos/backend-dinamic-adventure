@@ -18,7 +18,8 @@ const createAppointment = async (req: Request, res: Response) => {
         return res.json("El usuario no existe.");
       }
 
-      const { activity, participants, date_activity, accept_requirements } = req.body;
+      const { activity, participants, date_activity, accept_requirements } =
+        req.body;
 
       console.log(date_activity, "soy la fecha");
       const existActivity = await Activity.findOne({
@@ -56,45 +57,67 @@ const createAppointment = async (req: Request, res: Response) => {
         },
       });
 
-        if (existingAppointments) {
+      console.log(existingAppointments, "quiero saber que me das");
+      if (existingAppointments) {
         console.log("que ocurre", existingAppointments);
-        
-        function sumParticipants(b: number []) {
+
+        function sumParticipants(b: number[]) {
           let a = 0;
           for (let i = 0; i < b.length; i++) {
             a += b[i];
           }
           return a;
         }
-        
-        const participantsArray = existingAppointments.map(appointment => appointment.participants);
+
+        const participantsArray = existingAppointments.map(
+          (appointment) => appointment.participants
+        );
         console.log(participantsArray, "soy todos los participantes");
 
         const totalParticipants = sumParticipants(participantsArray);
-        console.log("soy el total de participantes", totalParticipants);
+        const participantsBooking = totalParticipants + participants;
 
-        if(totalParticipants < 12){
-          if ( totalParticipants + participants <= 12){
+        if (participantsBooking >= 0 && participantsBooking <= 12) {
+          if (participantsBooking >= 4 && participantsBooking <= 12) {
             const newAppointment = await Appointment.create({
               id_user: req.token.id,
               id_activity: activity,
               participants,
               price: existActivity.price,
+              status_appointment: "approved",
               date: date_activity,
             }).save();
             console.log(newAppointment, "soy newAppointment?");
             if (newAppointment) {
-              return res.json("se ha creado el newAppointment");
+              return res.json({
+                message: "se ha creado el newAppointment",
+              data: newAppointment
+            });
             }
             return res.json("No se ha creado la cita.");
           } else {
-            return res.json (`No hay ${participants} plazas disponibles para esa fecha.`)
+            if (participants <= 4) {
+              console.log(participants, "esto es el numero de participantes")
+              const newAppointment = await Appointment.create({
+                id_user: req.token.id,
+                id_activity: activity,
+                participants,
+                price: existActivity.price,
+                status_appointment: "pending",
+                date: date_activity,
+              }).save();
+              return res.json ({
+                message: "No completamos el grupo mínimo, nos pondremos en contacto contigo si llegamos al mínimo.",
+                data: newAppointment,
+              })
+          
+            }
           }
-        
         } else {
-          return res.json ("No hay disponibilidad")
+          return res.json(
+            `No hay ${participants} plazas disponibles para esa fecha.`
+          );
         }
-        
       }
     }
     return res.json("Usuario no autorizado.");
