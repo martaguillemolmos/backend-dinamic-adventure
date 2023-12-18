@@ -6,14 +6,11 @@ import { Appointment } from "../models/Appointment";
 
 const createAppointment = async (req: Request, res: Response) => {
   try {
-    if ((req.token.role == "user", "admin" && req.token.is_active == true)) {
-      //Recuperar el id del usuario por su token
-      console.log("aqui entra", req.token.role);
+    if ((req.token.role == "user", "admin", "super_admin" && req.token.is_active == true)) {
       const user = await Users.findOne({
         where: { id: req.token.id },
       });
 
-      console.log(user, "soy user");
       if (!user) {
         return res.json("El usuario no existe.");
       }
@@ -21,7 +18,6 @@ const createAppointment = async (req: Request, res: Response) => {
       const { activity, participants, date_activity, accept_requirements } =
         req.body;
 
-      console.log(date_activity, "soy la fecha");
       const existActivity = await Activity.findOne({
         where: { id: activity },
       });
@@ -29,10 +25,8 @@ const createAppointment = async (req: Request, res: Response) => {
       if (!existActivity) {
         return res.json("La actividad no existe.");
       }
-      console.log(existActivity.price, "esta es la actividad");
 
       const dateBody = dayjs(date_activity, "AAAA-MM-DDTHH:mm:ss SSS [Z] A");
-      // console.log(dateBody, "esto es dataBody")
       const dateNow = dayjs();
 
       if (!dateBody.isValid() || dateBody < dateNow) {
@@ -57,10 +51,7 @@ const createAppointment = async (req: Request, res: Response) => {
         },
       });
 
-      console.log(existingAppointments, "quiero saber que me das");
       if (existingAppointments) {
-        console.log("que ocurre", existingAppointments);
-
         function sumParticipants(b: number[]) {
           let a = 0;
           for (let i = 0; i < b.length; i++) {
@@ -72,7 +63,6 @@ const createAppointment = async (req: Request, res: Response) => {
         const participantsArray = existingAppointments.map(
           (appointment) => appointment.participants
         );
-        console.log(participantsArray, "soy todos los participantes");
 
         const totalParticipants = sumParticipants(participantsArray);
         const participantsBooking = totalParticipants + participants;
@@ -87,7 +77,6 @@ const createAppointment = async (req: Request, res: Response) => {
               status_appointment: "approved",
               date: date_activity,
             }).save();
-            console.log(newAppointment, "soy newAppointment?");
             if (newAppointment) {
               return res.json({
                 message: "se ha creado el newAppointment",
@@ -97,7 +86,6 @@ const createAppointment = async (req: Request, res: Response) => {
             return res.json("No se ha creado la cita.");
           } else {
             if (participants <= 4) {
-              console.log(participants, "esto es el numero de participantes")
               const newAppointment = await Appointment.create({
                 id_user: req.token.id,
                 id_activity: activity,
@@ -122,7 +110,6 @@ const createAppointment = async (req: Request, res: Response) => {
     }
     return res.json("Usuario no autorizado.");
   } catch (error) {
-    console.log(error);
     return res.json({
       succes: false,
       message: "No se ha creado la cita",
@@ -131,12 +118,55 @@ const createAppointment = async (req: Request, res: Response) => {
     });
   }
 };
+
 const updateAppointment = (req: Request, res: Response) => {
   return res.send("Update");
 };
-const getAppointmentById = (req: Request, res: Response) => {
-  return res.send("By Id");
+
+const getAppointmentByUser = async (req: Request, res: Response) => {
+  try {
+    if ((req.token.role == "user", "admin" && req.token.is_active == true)) {
+      //Recuperar el id del usuario por su token
+      const user = await Users.findOne({
+        where: { id: req.token.id },
+    }
+      );
+      console.log(user, "user")
+
+      if (!user) {
+        return res.json("El usuario no existe.");
+      }
+
+      const appointments = await Appointment.find({
+        where: { id_user: user.id},
+        relations: ["activity"]
+      });
+
+      console.log(appointments, "son todas las citas del usuario")
+
+      if (appointments.length === 0) {
+        return res.json("Actualmente no existen citas para este usuario.");
+      }
+
+      const result = appointments.map(({id_activity,activity, ...appointment }) => ({
+        ...appointment,
+        activity_name: activity.title,
+      }));
+
+      return res.json(result);
+    } else {
+      return res.json("Usuario no autorizado.");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha podido realizar la consulta",
+      error: error,
+    });
+  }
 };
+
 
 const getAllApointments = (req: Request, res: Response) => {
   return res.send("Appointment");
@@ -150,6 +180,6 @@ export {
   getAllApointments,
   createAppointment,
   updateAppointment,
-  getAppointmentById,
+  getAppointmentByUser,
   deleteAppointment,
 };
