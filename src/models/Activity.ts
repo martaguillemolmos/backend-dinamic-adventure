@@ -77,7 +77,7 @@ export class Activity extends BaseEntity {
   @Min(1)
   price!: number;
 
-  @Column({ type: 'blob' })
+  @Column({ type: 'longblob' })
   @IsBase64()
   image!: Buffer;
 

@@ -14,7 +14,7 @@ import { AppDataSource } from "./db";
 const PORT = process.env.PORT || 4000;
 
 const app = express ();
-app.use (express.json());
+app.use (express.json({limit: '50mb'}));
 app.use (cors());
 
 app.use ('/user', routerUser);
