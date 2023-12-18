@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createAppointment, deleteAppointment, getAllApointments, getApointmentsByDate, getAppointmentByUser, statusAppointment, updateAppointment } from "../controllers/appointmentsController";
+import { createAppointment, deleteAppointment, getAllApointments, getAppointmentsByDate, getAppointmentByUser, statusAppointment, updateAppointment, disponibilityDate } from "../controllers/appointmentsController";
 import { auth } from "../middelware/auth";
 import { isSuperAdmin } from "../middelware/isSuperAdmin";
 const router = Router ();
@@ -14,9 +14,11 @@ router.put("/", updateAppointment);
 router.put("/status", auth, isSuperAdmin, statusAppointment);
 //Recuperar por el id
 router.get("/", auth, getAppointmentByUser);
+//Recuperar la disponibilida de la cita
+router.get("/disponibility-activity", disponibilityDate);
 //Recuperar todas 
 router.get("/all", auth, isSuperAdmin, getAllApointments);
 //Recuperar todas 
-router.get("/date", getApointmentsByDate);
+router.get("/date", getAppointmentsByDate);
 //Eliminar 
 router.delete("/", deleteAppointment);
