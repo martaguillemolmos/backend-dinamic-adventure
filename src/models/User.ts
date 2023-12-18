@@ -90,7 +90,7 @@ export class Users extends BaseEntity {
   //Declaramos la relación muchos a muchos entre User y Activity
   @ManyToMany(() => Activity)
   @JoinTable({
-    name: "appointments",
+    name: "appointment",
     joinColumn: {
       name: "id_user",
       referencedColumnName: "id",
