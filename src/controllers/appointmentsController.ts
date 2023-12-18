@@ -125,7 +125,7 @@ const updateAppointment = (req: Request, res: Response) => {
 
 const getAppointmentByUser = async (req: Request, res: Response) => {
   try {
-    if ((req.token.role == "user", "admin" && req.token.is_active == true)) {
+    if ((req.token.role == "user", "admin", "super_admin" && req.token.is_active == true)) {
       //Recuperar el id del usuario por su token
       const user = await Users.findOne({
         where: { id: req.token.id },
@@ -167,6 +167,38 @@ const getAppointmentByUser = async (req: Request, res: Response) => {
   }
 };
 
+const getApointmentsByDate = async(req: Request, res: Response) => {
+  try {
+
+      const dateBody = req.body.date;
+
+      const appointments = await Appointment.find({
+        where: { date: dateBody},
+        relations: ["activity"]
+      });
+
+      console.log(appointments, "son todas las en esa fecha")
+
+      if (appointments.length === 0) {
+        return res.json(`Actualmente no existen citas para el día: ${dateBody}.`);
+      }
+
+      const result = appointments.map(({id_activity,activity, ...appointment }) => ({
+        ...appointment,
+        activity_name: activity.title,
+      }));
+
+      return res.json(result);
+    
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha podido realizar la consulta",
+      error: error,
+    });
+  }
+};
 
 const getAllApointments = (req: Request, res: Response) => {
   return res.send("Appointment");
@@ -181,5 +213,5 @@ export {
   createAppointment,
   updateAppointment,
   getAppointmentByUser,
-  deleteAppointment,
+  deleteAppointment, getApointmentsByDate
 };
