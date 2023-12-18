@@ -4,53 +4,58 @@ import { Activity } from "../models/Activity";
 import dayjs from "dayjs";
 import { Appointment } from "../models/Appointment";
 
-const disponibilityDate = async (req:Request, res: Response) => {
+const disponibilityDate = async (req: Request, res: Response) => {
   try {
-    const {date_activity} = req.body;
+    const { date } = req.body;
 
-    
-    const dateBody = dayjs(date_activity, "AAAA-MM-DDTHH:mm:ss SSS [Z] A");
-    const dateNow = dayjs();
+    const dateBody = dayjs(date);
 
-    if (!dateBody.isValid() || dateBody < dateNow) {
-      return res.json(
-        "El formato de la fecha no es válida o es anterior a la creación de la cita. Es {AAAA} MM-DDTHH:mm:ss SSS [Z] A' "
-      );
+    if (!dateBody.isValid()) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "El formato de la fecha no es válido. Utiliza el formato ISO 8601.",
+      });
     }
 
-    if (!dateBody) {
-      return res.json("La fecha y hora no puede ser nula.");
-    }
-
-    console.log(req.body.date, "soy date")
     const appointments = await Appointment.find({
-      where: { date: dateBody.toDate()},
-      relations: ["activity"],
+      where: { date: dateBody.toDate() },
     });
 
-    console.log(appointments, "son todas las en esa fecha");
+    let appointmentsByActivity = [];
 
-    if (appointments.length === 0) {
-      return res.json(`Actualmente no existen citas para el día: ${date_activity}.`);
+    for (const appointment of appointments) {
+      const { id_activity, participants } = appointment;
+
+      // Comprobamos si existe un objeto para esa id_activity
+      const existingElement = appointmentsByActivity.find(
+        (item) => item.id_activity === id_activity
+      );
+
+      if (existingElement) {
+        // Si ya existe, incrementa incrementa el número total de participantes
+        existingElement.allParticipants += participants;
+      } else {
+        // Si no existe, crea un nuevo elemento para esa id_activity
+        appointmentsByActivity.push({
+          id_activity,
+          allParticipants: participants,
+        });
+      }
     }
-
-    const result = appointments.map(
-      ({ id_activity, activity, ...appointment }) => ({
-        ...appointment,
-        activity_name: activity.title,
-      })
-    );
-
-    return res.json(result);
-  } catch (error) {
-    console.log(error);
     return res.json({
-      succes: false,
+      success: true,
+      data: appointmentsByActivity,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
       message: "No se ha podido realizar la consulta",
-      error: error,
     });
   }
-}
+};
+
 const createAppointment = async (req: Request, res: Response) => {
   try {
     if (
@@ -66,7 +71,8 @@ const createAppointment = async (req: Request, res: Response) => {
         return res.json("El usuario no existe.");
       }
 
-      const { activity, participants, date_activity, accept_requirements } =req.body;
+      const { activity, participants, date_activity, accept_requirements } =
+        req.body;
 
       const existActivity = await Activity.findOne({
         where: { id: activity },
@@ -220,30 +226,28 @@ const getAppointmentByUser = async (req: Request, res: Response) => {
 
 const getAppointmentsByDate = async (req: Request, res: Response) => {
   try {
-    const {date_activity} = req.body;
+    const { date } = req.body;
 
-    const dateBody = dayjs(date_activity, "AAAA-MM-DDTHH:mm:ss SSS [Z] A");
-    const dateNow = dayjs();
+    const dateBody = dayjs(date);
 
-    if (!dateBody.isValid() || dateBody < dateNow) {
-      return res.json(
-        "El formato de la fecha no es válida o es anterior a la creación de la cita. Es {AAAA} MM-DDTHH:mm:ss SSS [Z] A' "
-      );
-    }
-
-    if (!dateBody) {
-      return res.json("La fecha y hora no puede ser nula.");
+    if (!dateBody.isValid()) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "El formato de la fecha no es válido. Utiliza el formato ISO 8601.",
+      });
     }
 
     const appointments = await Appointment.find({
-      where: { date: dateBody.toDate()},
+      where: { date: dateBody.toDate() },
       relations: ["activity"],
     });
-
-    console.log(appointments, "son todas las en esa fecha");
-
+    console.log(appointments, "soy apponitmflmt");
     if (appointments.length === 0) {
-      return res.json(`Actualmente no existen citas para el día: ${dateBody}.`);
+      return res.json({
+        success: true,
+        message: `Actualmente no existen citas para el día: ${dateBody.toISOString()}.`,
+      });
     }
 
     const result = appointments.map(
@@ -253,13 +257,15 @@ const getAppointmentsByDate = async (req: Request, res: Response) => {
       })
     );
 
-    return res.json(result);
-  } catch (error) {
-    console.log(error);
     return res.json({
-      succes: false,
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
       message: "No se ha podido realizar la consulta",
-      error: error,
     });
   }
 };
@@ -290,7 +296,7 @@ const getAllApointments = async (req: Request, res: Response) => {
 
 const statusAppointment = async (req: Request, res: Response) => {
   try {
-    const {id_appointment, status_appointment} = req.body;
+    const { id_appointment, status_appointment } = req.body;
 
     const appointment = await Appointment.findOne({
       where: { id: id_appointment },
@@ -332,5 +338,6 @@ export {
   getAppointmentByUser,
   deleteAppointment,
   getAppointmentsByDate,
-  statusAppointment, disponibilityDate,
+  statusAppointment,
+  disponibilityDate,
 };
