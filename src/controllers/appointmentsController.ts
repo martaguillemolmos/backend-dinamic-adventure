@@ -200,8 +200,30 @@ const getApointmentsByDate = async(req: Request, res: Response) => {
   }
 };
 
-const getAllApointments = (req: Request, res: Response) => {
-  return res.send("Appointment");
+const getAllApointments = async(req: Request, res: Response) => {
+  try {
+    // Recuperamos a todos los usuarios
+    const appointments = await Appointment.find();
+    // Comprobamos si hay usuarios registrados.
+    if (appointments.length == 0) {
+      return res.json({
+        success: true,
+        message: `Actualmente, no hay citas registradas.`,
+      });
+    } else {
+      return res.json({
+        succes: true,
+        message: `Todas las citas:`,
+        data: appointments,
+      });
+    }
+  } catch (error) {
+    return res.json({
+      succes: false,
+      message: "No hemos podido recuperar las citas",
+      error: error,
+    });
+  }
 };
 
 const deleteAppointment = (req: Request, res: Response) => {
