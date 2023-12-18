@@ -14,14 +14,15 @@ const disponibilityDate = async (req: Request, res: Response) => {
       return res.status(400).json({
         success: false,
         message:
-          "El formato de la fecha no es válido. Utiliza el formato ISO 8601.",
+          "El formato de la fecha no es válido.",
       });
     }
 
     const appointments = await Appointment.find({
-      where: { date: dateBody.toDate() },
+      where: { date: dateBody.toDate() , status_appointment: "approved"},
     });
 
+    console.log("appointments", appointments)
     let appointmentsByActivity = [];
 
     for (const appointment of appointments) {
