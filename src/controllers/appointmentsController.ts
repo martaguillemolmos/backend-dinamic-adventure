@@ -7,9 +7,11 @@ import { Appointment } from "../models/Appointment";
 const disponibilityDate = async (req: Request, res: Response) => {
   try {
     const { date } = req.body;
-
+    const date1 = req.body.date;
     const dateBody = dayjs(date);
-
+    console.log("req.body", req.body);
+    console.log("date", date1)
+    console.log(dateBody, "este es dateBody")
     if (!dateBody.isValid()) {
       return res.status(400).json({
         success: false,

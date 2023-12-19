@@ -15,7 +15,7 @@ router.put("/status", auth, isSuperAdmin, statusAppointment);
 //Recuperar por el id
 router.get("/", auth, getAppointmentByUser);
 //Recuperar la disponibilida de la cita
-router.get("/disponibility-activity",auth, disponibilityDate);
+router.post("/disponibility-activity", disponibilityDate);
 //Recuperar todas 
 router.get("/all", auth, isSuperAdmin, getAllApointments);
 //Recuperar todas 
