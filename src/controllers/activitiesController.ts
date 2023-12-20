@@ -73,7 +73,7 @@ if (!existActivity){
 }
 
 //Recuperamos la información que van a modificar
-const { title, type, id_details, intensity, minimum_age, description, price, image } = req.body;
+const { title, type, intensity, minimum_age, description, price, image } = req.body;
     //Actualizamos los datos
      await Activity.update(
       {
@@ -108,13 +108,15 @@ const getActivityById = async(req: Request, res: Response) => {
   try {
 
     //Recuperamos el id de la actividad a través del body
-     const activityId = req.body.id;
+     const activity_id = req.params.id;
+
+     const id = parseInt(activity_id);
     //Comprobamos si existe
     const activity = await Activity.findOneBy({
-      id: parseInt(activityId)
+     id: id
     })
     //Validación
-    if (!activityId){
+    if (!activity){
       return res.status(403).json("El id no existe.");
     } 
 
