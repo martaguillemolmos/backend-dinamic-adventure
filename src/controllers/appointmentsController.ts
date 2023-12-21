@@ -11,13 +11,12 @@ const disponibilityDate = async (req: Request, res: Response) => {
     if (!dateBody.isValid()) {
       return res.status(400).json({
         success: false,
-        message:
-          "El formato de la fecha no es válido.",
+        message: "El formato de la fecha no es válido.",
       });
     }
 
     const appointments = await Appointment.find({
-      where: { date: dateBody.toDate() , status_appointment: "approved"},
+      where: { date: dateBody.toDate(), status_appointment: "approved" },
     });
 
     let appointmentsByActivity = [];
@@ -295,40 +294,41 @@ const getAllApointments = async (req: Request, res: Response) => {
 const updateAppointment = async (req: Request, res: Response) => {
   const appointmentId = req.body.id;
   const existAppointment = await Appointment.findOneBy({
-    id: appointmentId
-  })
-  console.log("soy existAppot", existAppointment)
+    id: appointmentId,
+  });
+  console.log("soy existAppot", existAppointment);
 
-  if (!existAppointment){
-    return res.json ("El id no existe")
+  if (!existAppointment) {
+    return res.json("El id no existe");
   }
-  
-
 
   const dateAppointment = dayjs(existAppointment.date);
   const dateNow = dayjs();
-  console.log("datenow", dateNow)
-  console.log(dateAppointment, "soy la date de appointment")
+  console.log("datenow", dateNow);
+  console.log(dateAppointment, "soy la date de appointment");
   // Calcular la diferencia en días
-  const diferenciaDias = dateAppointment.diff(dateNow, 'days');
-  console.log(diferenciaDias, "soy la diferencia")
+  const diferenciaDias = dateAppointment.diff(dateNow, "days");
+  console.log(diferenciaDias, "soy la diferencia");
 
-  if (existAppointment.status_appointment == "pending" || (existAppointment.status_appointment == "approved" && diferenciaDias >= 10)){
+  if (
+    existAppointment.status_appointment == "pending" ||
+    (existAppointment.status_appointment == "approved" && diferenciaDias >= 10)
+  ) {
     if (req.token.role !== "super_admin" && req.token.is_active == true) {
       const idToken = req.token.id;
-  
+
       if (existAppointment.id_user !== idToken) {
         return res.status(403).json({
           success: false,
           message: "No tienes permisos para actualizar esta reserva",
         });
       }
-    };
-  
+    }
+
     //Recuperamos la información que van a modificar
     const { participants, date, status_appointment } = req.body;
 
-    if (participants && date){
+    if (participants && date) {
       let updatedAppointment;
 
       const existingAppointments = await Appointment.find({
@@ -338,7 +338,7 @@ const updateAppointment = async (req: Request, res: Response) => {
           status_appointment: "approved",
         },
       });
-  
+
       if (existingAppointments) {
         function sumParticipants(b: number[]) {
           let a = 0;
@@ -347,16 +347,30 @@ const updateAppointment = async (req: Request, res: Response) => {
           }
           return a;
         }
-  
+
         const participantsArray = existingAppointments.map(
           (appointment) => appointment.participants
         );
-  
+
+        console.log(participantsArray);
         const totalParticipants = sumParticipants(participantsArray);
+        console.log(totalParticipants, "soy el total");
+
+        let participantsBooking;
         //Comprobamos si contamos con las plazas que nos solicitan
-        const changeParticipants = participants - existAppointment.participants
-        const participantsBooking = totalParticipants + changeParticipants
-  
+        if (existAppointment.participants > 4) {
+          const changeParticipants =
+          participants - existAppointment.participants;
+          console.log("la diferencia entre total y nuevo", changeParticipants);
+          participantsBooking = totalParticipants + changeParticipants;
+          console.log(participantsBooking, "soy todos los aprticia");
+          console.log("1");
+        } else {
+          participantsBooking = participants;
+          console.log("2");
+        }
+
+        console.log(participantsBooking, "quien soy");
         if (participantsBooking >= 0 && participantsBooking <= 12) {
           if (participantsBooking >= 4 && participantsBooking <= 12) {
             updatedAppointment = await Appointment.update(
@@ -372,14 +386,14 @@ const updateAppointment = async (req: Request, res: Response) => {
             if (updatedAppointment) {
               return res.json({
                 success: true,
-                message: "se ha creado el newAppointment",
+                message: "se ha modificado el newAppointment",
                 data: updatedAppointment,
               });
             } else {
               return res.json("No se ha creado la cita.");
             }
           } else {
-            if (participants <= 4) {
+            if (participantsBooking <= 4) {
               updatedAppointment = await Appointment.update(
                 {
                   id: appointmentId,
@@ -404,13 +418,13 @@ const updateAppointment = async (req: Request, res: Response) => {
           );
         }
       }
-  
+
       return res.json({
         success: true,
         message: "Actualizado",
         data: updatedAppointment,
       });
-    } else if (status_appointment){
+    } else if (status_appointment) {
       let updatedAppointment = await Appointment.update(
         {
           id: appointmentId,
@@ -421,12 +435,11 @@ const updateAppointment = async (req: Request, res: Response) => {
       );
       return res.json({
         success: true,
-        message:
-          "Se ha cancelado la cita",
+        message: "Se ha cancelado la cita",
         data: updatedAppointment,
       });
-    } return null;
-    
+    }
+    return null;
   } else {
     return res.json("No puedes modificar la reserva");
   }
@@ -439,4 +452,4 @@ export {
   getAppointmentByUser,
   getAppointmentsByDate,
   disponibilityDate,
-}
+};
