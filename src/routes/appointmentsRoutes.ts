@@ -9,7 +9,7 @@ export {router}
 //Crear 
 router.post("/",auth, createAppointment);
 //Modificar 
-router.put("/", updateAppointment);
+router.put("/", auth, updateAppointment);
 //Modificar 
 router.put("/status", auth, isSuperAdmin, statusAppointment);
 //Recuperar por el id

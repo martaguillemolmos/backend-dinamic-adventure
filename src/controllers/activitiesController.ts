@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Activity } from "../models/Activity";
 import dayjs from "dayjs";
 import { validate } from "class-validator";
+import { Activity_Details } from "../models/Activity_Details";
 
 const createActivity = async(req: Request, res: Response) => {
   try {
@@ -111,6 +112,7 @@ const getActivityById = async(req: Request, res: Response) => {
      const activity_id = req.params.id;
 
      const id = parseInt(activity_id);
+     
     //Comprobamos si existe
     const activity = await Activity.findOneBy({
      id: id
@@ -120,9 +122,16 @@ const getActivityById = async(req: Request, res: Response) => {
       return res.status(403).json("El id no existe.");
     } 
 
+    //Buscamos en la tabla de detalles de la actividad, todos aquellos que correponden con ese id.
+    const activityDetails = await Activity_Details.find({
+      where: {
+        id_activity: id,
+      },
+    });
+
     return res.json({
       message: "Información del detalle",
-      data: activity,
+      data: {activity, activityDetails}
     })
   } catch (error) {
     return res.json({

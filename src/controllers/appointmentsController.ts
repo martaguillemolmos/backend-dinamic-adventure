@@ -321,8 +321,60 @@ const statusAppointment = async (req: Request, res: Response) => {
   }
 };
 
-const updateAppointment = (req: Request, res: Response) => {
-  return res.send("Update");
+const updateAppointment = async (req: Request, res: Response) => {
+  const appointmentId = req.body.id;
+  //Comprobamos que existe el id
+  const existAppointment = await Appointment.findOneBy({
+    id: appointmentId
+  })
+  console.log("soy existAppot", existAppointment)
+  // Validamos
+  if (!existAppointment){
+    return res.json ("El id no existe")
+  }
+  
+  if(existAppointment.status_appointment !== "pending"){
+    console.log("No puedes modificar una reserva que no esté pendiente")
+  }
+  
+  if (req.token.role !== "super_admin" && req.token.is_active == true) {
+    // Recuperar el id del usuario por su token
+    const userIdFromToken = req.token.id;
+
+    // Compare the appointment id with the user id from the token
+    if (existAppointment.id_user !== userIdFromToken) {
+      return res.status(403).json({
+        success: false,
+        message: "No tienes permisos para actualizar esta reserva",
+      });
+    }
+  };
+
+  //Recuperamos la información que van a modificar
+  const { participants, date, status_appointment } = req.body;
+      //Actualizamos los datos
+       await Appointment.update(
+        {
+          id :appointmentId,
+        },
+        {
+          participants,
+          date,
+          status_appointment,
+        }
+      );
+  
+      //Recuperamos la información actualizada
+      const updated = await Appointment.findOneBy({
+        id:appointmentId
+      })
+      
+      return res.json ({
+        success: true,
+        message: "Actualizado",
+        data: updated
+      })
+  
 };
 
 const deleteAppointment = (req: Request, res: Response) => {
@@ -338,4 +390,4 @@ export {
   getAppointmentsByDate,
   statusAppointment,
   disponibilityDate,
-};
+}
