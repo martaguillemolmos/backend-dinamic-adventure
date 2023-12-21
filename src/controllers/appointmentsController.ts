@@ -353,11 +353,12 @@ const updateAppointment = async (req: Request, res: Response) => {
         );
   
         const totalParticipants = sumParticipants(participantsArray);
-        const participantsBooking = totalParticipants + participants;
+        //Comprobamos si contamos con las plazas que nos solicitan
+        const changeParticipants = participants - existAppointment.participants
+        const participantsBooking = totalParticipants + changeParticipants
   
         if (participantsBooking >= 0 && participantsBooking <= 12) {
           if (participantsBooking >= 4 && participantsBooking <= 12) {
-            // Corregimos aquí, actualizamos updatedAppointment
             updatedAppointment = await Appointment.update(
               {
                 id: appointmentId,
@@ -369,7 +370,6 @@ const updateAppointment = async (req: Request, res: Response) => {
               }
             );
             if (updatedAppointment) {
-              // Corregimos aquí, movemos este retorno dentro del bloque
               return res.json({
                 success: true,
                 message: "se ha creado el newAppointment",
@@ -405,7 +405,6 @@ const updateAppointment = async (req: Request, res: Response) => {
         }
       }
   
-      // Corregimos aquí, movemos este retorno dentro del bloque
       return res.json({
         success: true,
         message: "Actualizado",
