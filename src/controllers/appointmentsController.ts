@@ -292,35 +292,6 @@ const getAllApointments = async (req: Request, res: Response) => {
   }
 };
 
-const statusAppointment = async (req: Request, res: Response) => {
-  try {
-    const { id_appointment, status_appointment } = req.body;
-
-    const appointment = await Appointment.findOne({
-      where: { id: id_appointment },
-    });
-
-    if (!appointment) {
-      return res.json("El appointment no existe");
-    }
-    await Appointment.update(
-      {
-        id: id_appointment,
-      },
-      {
-        status_appointment,
-      }
-    );
-    return res.json(appointment);
-  } catch (error) {
-    return res.json({
-      succes: false,
-      message: "No hemos podido modificar la cita",
-      error: error,
-    });
-  }
-};
-
 const updateAppointment = async (req: Request, res: Response) => {
   const appointmentId = req.body.id;
   //Comprobamos que existe el id
@@ -333,61 +304,64 @@ const updateAppointment = async (req: Request, res: Response) => {
     return res.json ("El id no existe")
   }
   
-  if(existAppointment.status_appointment !== "pending"){
-    console.log("No puedes modificar una reserva que no esté pendiente")
-  }
-  
-  if (req.token.role !== "super_admin" && req.token.is_active == true) {
-    // Recuperar el id del usuario por su token
-    const userIdFromToken = req.token.id;
+  const dateAppointment = dayjs(existAppointment.date);
+  const dateNow = dayjs();
+  console.log("datenow", dateNow)
+  console.log(dateAppointment, "soy la date de appointment")
+  // Calcular la diferencia en días
+  const diferenciaDias = dateAppointment.diff(dateNow, 'days');
+  console.log(diferenciaDias, "soy la diferencia")
 
-    // Compare the appointment id with the user id from the token
-    if (existAppointment.id_user !== userIdFromToken) {
-      return res.status(403).json({
-        success: false,
-        message: "No tienes permisos para actualizar esta reserva",
-      });
-    }
-  };
+  if (existAppointment.status_appointment == "pending" || (existAppointment.status_appointment == "approved" && diferenciaDias >= 10)){
+    if (req.token.role !== "super_admin" && req.token.is_active == true) {
+      // Recuperar el id del usuario por su token
+      const userIdFromToken = req.token.id;
+  
+      // Compare the appointment id with the user id from the token
+      if (existAppointment.id_user !== userIdFromToken) {
+        return res.status(403).json({
+          success: false,
+          message: "No tienes permisos para actualizar esta reserva",
+        });
+      }
+    };
+  
+    //Recuperamos la información que van a modificar
+    const { participants, date, status_appointment } = req.body;
+  
+  
+        //Actualizamos los datos
+         await Appointment.update(
+          {
+            id :appointmentId,
+          },
+          {
+            status_appointment,
+            participants,
+            date
+          }
+        );
+    
+        //Recuperamos la información actualizada
+        const updated = await Appointment.findOneBy({
+          id:appointmentId
+        })
+        
+        return res.json ({
+          success: true,
+          message: "Actualizado",
+          data: updated
+        })  
+      } console.log ("no puedes modificarla")
 
-  //Recuperamos la información que van a modificar
-  const { participants, date, status_appointment } = req.body;
-      //Actualizamos los datos
-       await Appointment.update(
-        {
-          id :appointmentId,
-        },
-        {
-          participants,
-          date,
-          status_appointment,
-        }
-      );
-  
-      //Recuperamos la información actualizada
-      const updated = await Appointment.findOneBy({
-        id:appointmentId
-      })
-      
-      return res.json ({
-        success: true,
-        message: "Actualizado",
-        data: updated
-      })
-  
 };
 
-const deleteAppointment = (req: Request, res: Response) => {
-  return res.send("Delete");
-};
 
 export {
   getAllApointments,
   createAppointment,
   updateAppointment,
   getAppointmentByUser,
-  deleteAppointment,
   getAppointmentsByDate,
-  statusAppointment,
   disponibilityDate,
 }
