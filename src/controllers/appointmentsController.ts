@@ -294,16 +294,17 @@ const getAllApointments = async (req: Request, res: Response) => {
 
 const updateAppointment = async (req: Request, res: Response) => {
   const appointmentId = req.body.id;
-  //Comprobamos que existe el id
   const existAppointment = await Appointment.findOneBy({
     id: appointmentId
   })
   console.log("soy existAppot", existAppointment)
-  // Validamos
+
   if (!existAppointment){
     return res.json ("El id no existe")
   }
   
+
+
   const dateAppointment = dayjs(existAppointment.date);
   const dateNow = dayjs();
   console.log("datenow", dateNow)
@@ -314,11 +315,9 @@ const updateAppointment = async (req: Request, res: Response) => {
 
   if (existAppointment.status_appointment == "pending" || (existAppointment.status_appointment == "approved" && diferenciaDias >= 10)){
     if (req.token.role !== "super_admin" && req.token.is_active == true) {
-      // Recuperar el id del usuario por su token
-      const userIdFromToken = req.token.id;
+      const idToken = req.token.id;
   
-      // Compare the appointment id with the user id from the token
-      if (existAppointment.id_user !== userIdFromToken) {
+      if (existAppointment.id_user !== idToken) {
         return res.status(403).json({
           success: false,
           message: "No tienes permisos para actualizar esta reserva",
@@ -328,34 +327,111 @@ const updateAppointment = async (req: Request, res: Response) => {
   
     //Recuperamos la información que van a modificar
     const { participants, date, status_appointment } = req.body;
+
+    if (participants && date){
+      let updatedAppointment;
+
+      const existingAppointments = await Appointment.find({
+        where: {
+          id_activity: existAppointment.id_activity,
+          date,
+          status_appointment: "approved",
+        },
+      });
   
-  
-        //Actualizamos los datos
-         await Appointment.update(
-          {
-            id :appointmentId,
-          },
-          {
-            status_appointment,
-            participants,
-            date
+      if (existingAppointments) {
+        function sumParticipants(b: number[]) {
+          let a = 0;
+          for (let i = 0; i < b.length; i++) {
+            a += b[i];
           }
+          return a;
+        }
+  
+        const participantsArray = existingAppointments.map(
+          (appointment) => appointment.participants
         );
+  
+        const totalParticipants = sumParticipants(participantsArray);
+        const participantsBooking = totalParticipants + participants;
+  
+        if (participantsBooking >= 0 && participantsBooking <= 12) {
+          if (participantsBooking >= 4 && participantsBooking <= 12) {
+            // Corregimos aquí, actualizamos updatedAppointment
+            updatedAppointment = await Appointment.update(
+              {
+                id: appointmentId,
+              },
+              {
+                status_appointment: "approved",
+                participants,
+                date,
+              }
+            );
+            if (updatedAppointment) {
+              // Corregimos aquí, movemos este retorno dentro del bloque
+              return res.json({
+                success: true,
+                message: "se ha creado el newAppointment",
+                data: updatedAppointment,
+              });
+            } else {
+              return res.json("No se ha creado la cita.");
+            }
+          } else {
+            if (participants <= 4) {
+              updatedAppointment = await Appointment.update(
+                {
+                  id: appointmentId,
+                },
+                {
+                  status_appointment: "pending",
+                  participants,
+                  date,
+                }
+              );
+              return res.json({
+                success: true,
+                message:
+                  "No completamos el grupo mínimo, nos pondremos en contacto contigo si llegamos al mínimo.",
+                data: updatedAppointment,
+              });
+            }
+          }
+        } else {
+          return res.json(
+            `No hay ${participants} plazas disponibles para esa fecha.`
+          );
+        }
+      }
+  
+      // Corregimos aquí, movemos este retorno dentro del bloque
+      return res.json({
+        success: true,
+        message: "Actualizado",
+        data: updatedAppointment,
+      });
+    } else if (status_appointment){
+      let updatedAppointment = await Appointment.update(
+        {
+          id: appointmentId,
+        },
+        {
+          status_appointment,
+        }
+      );
+      return res.json({
+        success: true,
+        message:
+          "Se ha cancelado la cita",
+        data: updatedAppointment,
+      });
+    } return null;
     
-        //Recuperamos la información actualizada
-        const updated = await Appointment.findOneBy({
-          id:appointmentId
-        })
-        
-        return res.json ({
-          success: true,
-          message: "Actualizado",
-          data: updated
-        })  
-      } console.log ("no puedes modificarla")
-
+  } else {
+    return res.json("No puedes modificar la reserva");
+  }
 };
-
 
 export {
   getAllApointments,
