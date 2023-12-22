@@ -152,7 +152,7 @@ const loginUser = async (req: Request, res: Response) => {
 };
 
 //Logearse como un usuario
-const superIsUser = async (req: Request, res: Response) => {
+const loginSuper = async (req: Request, res: Response) => {
   try {
     const tokenSuper = req.token;   
     console.log(tokenSuper, "este es el token")
@@ -168,7 +168,7 @@ const superIsUser = async (req: Request, res: Response) => {
 
     //Consultar en BD si el usuario existe
     const user = await Users.findOneBy({
-      id: parseInt(id_user)
+      id: id_user
     });
 
     // En el caso que el usuario no sea el mismo
@@ -203,17 +203,31 @@ const superIsUser = async (req: Request, res: Response) => {
 // Perfil
 const profileUser = async (req: any, res: Response) => {
   try {
-    //Recuperamos el id del usuario a través del token.
-    const user = await Users.findOneBy({
-      id: req.token.id,
-    });
-    // Añadimos que, si el usuario en el momento desactive la cuenta, ya no se le permite acceder a su perfil.
-    if (!user) {
-      return res.status(403).json("Usuario no autorizado.");
-    }
+    //Recuperamos el token descifrado
+    const token = req.token
+    
+    let user;
 
-    if (!user?.is_active) {
-      return res.status(404).json("Usuario no autorizado.");
+    if (token.user_token === "") {
+      user = await Users.findOneBy({
+        id: req.token.id,
+      });
+
+      if (!user) {
+        return res.status(403).json("Usuario no autorizado.");
+      }
+
+      if (!user?.is_active) {
+        return res.status(404).json("Usuario no autorizado.");
+      }
+    } else {
+      user = await Users.findOneBy({
+        id: token.user_token.id,
+      });
+
+      if (!user) {
+        return res.status(403).json("Usuario no autorizado.");
+      }
     }
 
     return res.json({
@@ -222,7 +236,7 @@ const profileUser = async (req: any, res: Response) => {
     });
   } catch (error) {
     return res.json({
-      succes: false,
+      success: false,
       message: "Usuario no autorizado.",
       error: error,
     });
@@ -485,5 +499,5 @@ export {
   updateUser,
   updatePassword,
   deactivateAccount,
-  superIsUser
+  loginSuper
 };
