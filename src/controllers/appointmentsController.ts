@@ -174,19 +174,27 @@ const createAppointment = async (req: Request, res: Response) => {
 
 const getAppointmentByUser = async (req: Request, res: Response) => {
   try {
+    const token = req.token
+    console.log(token, "soy el token")
+
     if (
-      (req.token.role == "user",
-      "admin",
-      "super_admin" && req.token.is_active == true)
+      (token.is_active == true)
     ) {
-      //Recuperar el id del usuario por su token
-      const user = await Users.findOne({
-        where: { id: req.token.id },
-      });
-      console.log(user, "user");
+      console.log(token, "soy token")
+      let user;
+      if (token.user_token == "") {
+        user = await Users.findOneBy({
+          id: req.token.id,
+        });
+  
+      } else {
+        user = await Users.findOneBy({
+          id: token.user_token.id,
+        });
+      }
 
       if (!user) {
-        return res.json("El usuario no existe.");
+        return res.status(403).json("Usuario no autorizado.");
       }
 
       const appointments = await Appointment.find({
