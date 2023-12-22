@@ -269,17 +269,28 @@ const getAppointmentsByDate = async (req: Request, res: Response) => {
 
 const getAllApointments = async (req: Request, res: Response) => {
   try {
-    const appointments = await Appointment.find();
+    const appointments = await Appointment.find({
+      relations: ["activity"],
+    });
+
     if (appointments.length == 0) {
       return res.json({
         success: true,
         message: `Actualmente, no hay citas registradas.`,
       });
     } else {
+
+      const result = appointments.map(
+        ({ id_activity, activity, ...appointment }) => ({
+          ...appointment,
+          activity_name: activity.title,
+        })
+      );
+
       return res.json({
         succes: true,
         message: `Todas las citas:`,
-        data: appointments,
+        data: result,
       });
     }
   } catch (error) {
