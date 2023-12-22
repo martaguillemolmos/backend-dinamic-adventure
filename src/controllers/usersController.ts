@@ -126,23 +126,75 @@ const loginUser = async (req: Request, res: Response) => {
           id: user.id,
           role: user.role,
           is_active: user.is_active,
+          user_token: "",
         },
         process.env.JWT_SECRET as string,
         {
           expiresIn: "2h",
         }
       );
+
       return res.json({
         success: true,
         message: `Bienvenid@ a tu perfil, ${user.name}`,
         token: token,
         name: user.name,
+        role: user.role,
       });
     } else {
       return res
         .status(403)
         .json({ message: "Usuario o contraseña incorrecta." });
     }
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
+//Logearse como un usuario
+const superIsUser = async (req: Request, res: Response) => {
+  try {
+    const tokenSuper = req.token;   
+    console.log(tokenSuper, "este es el token")
+    const {id_user} = req.body;
+
+    if (!tokenSuper){
+      return res.json ("No tienes token")
+    }
+    // Comprobamos que nos envían characteres.
+    if (!id_user){
+      return res.json("Para procesar la solicitud es necesario el id")
+    } 
+
+    //Consultar en BD si el usuario existe
+    const user = await Users.findOneBy({
+      id: parseInt(id_user)
+    });
+
+    // En el caso que el usuario no sea el mismo
+    if (!user) {
+      return res.status(403).json("Usuario o contraseña incorrecta");
+    }
+    
+    const token = jwt.sign(
+        {
+          id: tokenSuper.id,
+          role: tokenSuper.role,
+          is_active: tokenSuper.is_active,
+          user_token: user,
+        },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: "2h",
+        }
+      );
+
+    //Logearse con el token, añadiendole el campo de user_token
+      return res.json({
+        success: true,
+        message: `Bienvenid@ a al perfil de: ${user.name}`,
+        token,
+      });
   } catch (error) {
     return res.status(500).json(error);
   }
@@ -433,4 +485,5 @@ export {
   updateUser,
   updatePassword,
   deactivateAccount,
+  superIsUser
 };
