@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { createUser, deactivateAccount, getAllUsers, loginUser, profileUser, updatePassword, updateUser } from "../controllers/usersController";
 import { auth } from "../middelware/auth";
+import { isSuperAdmin } from "../middelware/isSuperAdmin";
 const router = Router ();
 
 export {router}
@@ -12,7 +13,7 @@ router.post ("/", loginUser);
 //Register: Crear un nuevo usuario.
 router.post ("/register", createUser);
 //Recuperar la información de todos los usuarios.
-router.get("/", getAllUsers);
+router.get("/", auth, isSuperAdmin, getAllUsers);
 //Profile: Recuperar toda la información del usuario.
 router.get("/profile", auth, profileUser);
 //Modificar la información del perfil.
