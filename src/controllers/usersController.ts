@@ -7,6 +7,13 @@ import dayjs from "dayjs";
 
 // Register: Crear nuevos usuarios
 const createUser = async (req: Request, res: Response) => {
+  
+  let error = {
+    message: `Usuario no registrado, valida los campos.`,
+  }
+
+  let formatDate = new Date(dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss"));
+
   try {
     // Recuperamos la información que nos envían desde el body
     const { name, surname, phone, email, password } = req.body;
@@ -21,23 +28,21 @@ const createUser = async (req: Request, res: Response) => {
     Uservalidate.password = password.trim();
     Uservalidate.is_active = true;
     Uservalidate.role = "user";
-    Uservalidate.updated_at = new Date(
-      dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
-    );
-    Uservalidate.created_at = new Date(
-      dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
-    );
+    Uservalidate.updated_at = formatDate;
+    Uservalidate.created_at = formatDate;
     console.log(req.body, "soy tu body");
 
     //Evaluamos la validacion mediante class-validator validate
     const errorValidate = await validate(Uservalidate);
-    console.log(errorValidate, "soy tu error");
     if (errorValidate.length > 0) {
-      console.log(errorValidate, "soy tu error");
-      return res.status(404).json(errorValidate);
+      return res.status(404).json({
+        message: "Comprueba de nuevo los campos.",
+        data: errorValidate
+      })
+
     }
 
-    //Debemos encriptar la contraseña antes de guardarla.
+    //Encriptamos la contraseña antes de guardarla
     const encryptedPassword = bcrypt.hashSync(password.trim(), 10);
     const newUser = await Users.create({
       name: name.trim(),
@@ -60,20 +65,23 @@ const createUser = async (req: Request, res: Response) => {
         }
       );
       return res.json({
+        status: 200,
         success: true,
         message: `Bienvenid@ a tu perfil, ${newUser.name}`,
         token: token,
         name: newUser.name,
       });
-    }
+    } return res.status(404).json(error);
   } catch (error) {
-    console.error("Error en la creación del usuario:", error);
-    res.status(500).json(`Error al crear el usuario: ${error}`);
+    return res.status(500).json({
+      message: `Usuario no registrado, valida los campos.`,
+    });
   }
 };
 
 //Login
 const loginUser = async (req: Request, res: Response) => {
+
   try {
     // Recuperamos los datos guardados en body
     const { email, password } = req.body;
@@ -85,9 +93,8 @@ const loginUser = async (req: Request, res: Response) => {
       req.body.email.trim() === "" ||
       req.body.password.trim() === ""
     ) {
-      return res.json({
-        success: true,
-        message: "Introduce usuario y contraseña.",
+      return res.status(404).json({
+        message: `Usuario o contraseña incorrecta.`,
       });
     }
 
@@ -111,11 +118,11 @@ const loginUser = async (req: Request, res: Response) => {
 
     // En el caso que el usuario no sea el mismo
     if (!user) {
-      return res.status(403).json("Usuario o contraseña incorrecta");
+      return res.status(404).json({message: "Usuario o contraseña incorrecta"});
     }
     //Comprobamos si el usuario está activo
     if (!user?.is_active) {
-      return res.status(404).json("Usuario o contraseña incorrecta");
+      return res.status(404).json({message: "Usuario o contraseña incorrecta"});
     }
     //Si el usuario si es correcto, compruebo la contraseña
     console.log(user.password);
@@ -142,59 +149,59 @@ const loginUser = async (req: Request, res: Response) => {
         role: user.role,
       });
     } else {
-      return res
-        .status(403)
-        .json({ message: "Usuario o contraseña incorrecta." });
+      return res.status(404).json({message: "Usuario o contraseña incorrecta"});
     }
   } catch (error) {
-    return res.status(500).json(error);
+    return res.status(500).json({
+      message: `Usuario o contraseña incorrecta.`,
+    })
   }
 };
 
 //Logearse como un usuario
 const loginSuper = async (req: Request, res: Response) => {
   try {
-    const tokenSuper = req.token;   
-    console.log(tokenSuper, "este es el token")
-    const {id_user} = req.body;
+    const tokenSuper = req.token;
+    console.log(tokenSuper, "este es el token");
+    const { id_user } = req.body;
 
-    if (!tokenSuper){
-      return res.json ("No tienes token")
+    if (!tokenSuper) {
+      return res.json("No tienes token");
     }
     // Comprobamos que nos envían characteres.
-    if (!id_user){
-      return res.json("Para procesar la solicitud es necesario el id")
-    } 
+    if (!id_user) {
+      return res.json("Para procesar la solicitud es necesario el id");
+    }
 
     //Consultar en BD si el usuario existe
     const user = await Users.findOneBy({
-      id: id_user
+      id: id_user,
     });
 
     // En el caso que el usuario no sea el mismo
     if (!user) {
       return res.status(403).json("Usuario o contraseña incorrecta");
     }
-    
+
     const token = jwt.sign(
-        {
-          id: tokenSuper.id,
-          role: tokenSuper.role,
-          is_active: tokenSuper.is_active,
-          user_token: user,
-        },
-        process.env.JWT_SECRET as string,
-        {
-          expiresIn: "2h",
-        }
-      );
+      {
+        id: tokenSuper.id,
+        role: tokenSuper.role,
+        is_active: tokenSuper.is_active,
+        user_token: user,
+      },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: "2h",
+      }
+    );
 
     //Logearse con el token, añadiendole el campo de user_token
-      return res.json({
-        success: true,
-        message: `Bienvenid@ a al perfil de: ${user.name}`,
-        token,
-      });
+    return res.json({
+      success: true,
+      message: `Bienvenid@ a al perfil de: ${user.name}`,
+      token,
+    });
   } catch (error) {
     return res.status(500).json(error);
   }
@@ -203,44 +210,55 @@ const loginSuper = async (req: Request, res: Response) => {
 // Perfil
 const profileUser = async (req: any, res: Response) => {
   try {
-    //Recuperamos el token descifrado
-    const token = req.token
-    
+
+    let error = {
+      status: 404,
+      success: false,
+      message: `Usuario o contraseña incorrecta.`,
+    }
+
+    // Recuperamos el token descifrado
+    const token = req.token;
+
+    // Validar si el token es una cadena vacía
+    if (token === "") {
+        return res.json(error);
+    }
+
     let user;
 
-    if (token.user_token === "") {
-      user = await Users.findOneBy({
-        id: req.token.id,
-      });
-
-      if (!user) {
-        return res.status(403).json("Usuario no autorizado.");
-      }
-
-      if (!user?.is_active) {
-        return res.status(404).json("Usuario no autorizado.");
-      }
+    if (!token.user_token) {
+        user = await Users.findOneBy({
+            id: req.token.id,
+        });
     } else {
-      user = await Users.findOneBy({
-        id: token.user_token.id,
-      });
+        user = await Users.findOneBy({
+            id: token.user_token.id,
+        });
+    }
 
-      if (!user) {
-        return res.status(403).json("Usuario no autorizado.");
-      }
+    if (!user) {
+        return res.json(error);
+    }
+
+    if (!user?.is_active) {
+      return res.json(error);
     }
 
     return res.json({
-      message: "Datos del perfil",
-      data: user,
+        status: 200,
+        success:true,
+        message: "Datos del perfil:",
+        data: user,
     });
-  } catch (error) {
+    
+} catch (error) {
     return res.json({
+      status: 500,
       success: false,
-      message: "Usuario no autorizado.",
-      error: error,
+      message: `Usuario o contraseña incorrecta.`,
     });
-  }
+}
 };
 
 // Modificar la información del perfil.
@@ -499,5 +517,5 @@ export {
   updateUser,
   updatePassword,
   deactivateAccount,
-  loginSuper
+  loginSuper,
 };
