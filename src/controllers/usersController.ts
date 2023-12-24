@@ -200,6 +200,7 @@ const loginSuper = async (req: Request, res: Response) => {
   }
 };
 
+
 // Perfil
 const profileUser = async (req: any, res: Response) => {
   try {
@@ -268,18 +269,18 @@ const updateUser = async (req: Request, res: Response) => {
       !emailRegex.test(email) &&
       (email.length == 0 || email.length > 50)
     ) {
-      return res.json(
+      return res.status(404).json(
         "Formato de email incorrecto. Recuerda: Número máx. de caracteres 50."
       );
     }
     if (name !== undefined && name.trim() !== "" && name.length > 50) {
-      return res.json("Número máx. de caracteres 50.");
+      return res.status(404).json("Número máx. de caracteres 50.");
     }
     if (surname !== undefined && surname.trim() !== "" && surname.length > 50) {
-      return res.json("Número máx. de caracteres 50.");
+      return res.status(404).json("Número máx. de caracteres 50.");
     }
     if (phone !== undefined && (phone > 999999999 || phone < 600000000)) {
-      return res.json(
+      return res.status(404).json(
         "Introduce un número de 9 caracteres, puede empezar desde el 6."
       );
     }
@@ -301,27 +302,26 @@ const updateUser = async (req: Request, res: Response) => {
         }
       );
     }
-    console.log("user", user);
 
     updatedUser = await Users.findOne({
       where: { id: req.token.id },
     });
 
     if (updatedUser) {
-      return res.json({
+      return res.status(200).json({
         succes: true,
         message: `Enhorabuena ${updatedUser.name}, tu información se ha actualizado con éxito.`,
         data: updatedUser,
       });
     } else {
-      return res.json({
+      return res.status(404).json({
         succes: false,
         message: `${user.name}, no se ha podido actualizar la información.`,
       });
     }
   } catch (error) {
     console.log("error", error);
-    return res.json({
+    return res.status(404).json({
       succes: false,
       message: `No se ha podido actualizar la información.`,
       error: error,

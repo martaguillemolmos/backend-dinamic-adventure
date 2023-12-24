@@ -1,17 +1,19 @@
 import {Router } from "express";
 import { createActivity_Details, deleteActivity_Details, getActivity_DetailsById, getAllActivity_Details, updateActivity_Details } from "../controllers/acitivity_detailsController";
+import { auth } from "../middelware/auth";
+import { isSuperAdmin } from "../middelware/isSuperAdmin";
 const router = Router ();
 
 export {router}
 
 //Crear 
-router.post("/", createActivity_Details);
+router.post("/", auth, isSuperAdmin, createActivity_Details);
 //Modificar 
-router.put("/", updateActivity_Details);
+router.put("/", auth, isSuperAdmin, updateActivity_Details);
 //Recuperar por el id
 router.get("/", getActivity_DetailsById);
 //Recuperar todas 
 router.get("/all", getAllActivity_Details);
 //Eliminar 
-router.delete("/", deleteActivity_Details);
+router.delete("/", auth, isSuperAdmin, deleteActivity_Details);
 
