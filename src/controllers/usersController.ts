@@ -53,6 +53,7 @@ const createUser = async (req: Request, res: Response) => {
           id: newUser.id,
           role: newUser.role,
           is_active: newUser.is_active,
+          user_token: "",
         },
         process.env.JWT_SECRET as string,
         {
