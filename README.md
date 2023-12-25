@@ -1,5 +1,4 @@
->[!NOTE]
->Soy una nota
+
 # <h1 align="center">README -  Dinamic Adventure </h1>
 __<p align="center">Proyecto Final - Full Stack Developer Bootcamp en GeeksHubs Academy </p>__
 
@@ -9,6 +8,8 @@ __<p align="center">Proyecto Final - Full Stack Developer Bootcamp en GeeksHubs 
    </div>    
 </p>
 
+<p align="center">Backend de Dinamic Adventure, por Marta Guillem Olmos.
+<br></p>
 
 ## 📋 Contenido del Readme
 
@@ -39,6 +40,8 @@ El enfoque principal es crear un backend eficiente y escalable que permita a los
       <em>Vista de la plataforma previa al proyecto</em>
    </div>
 
+>[!IMPORTANT]
+>Acceder al frontend de este proyecto: https://github.com/martaguillemolmos/frontedtattostudio
 
 ## 🎯 Objetivo
 
