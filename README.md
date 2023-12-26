@@ -1,6 +1,6 @@
 
 # <h1 align="center">README -  Dinamic Adventure </h1>
-__<p align="center">Proyecto Final - Full Stack Developer Bootcamp en GeeksHubs Academy </p>__
+__<p align="center">Proyecto Final: Backend - Full Stack Developer Bootcamp en GeeksHubs Academy </p>__
 
 <p>
    <div align="center">
@@ -13,8 +13,6 @@ __<p align="center">Proyecto Final - Full Stack Developer Bootcamp en GeeksHubs 
 
 ## 📋 Contenido del Readme
 
-<details> <summary>Accede al contenido del Readme</summary>
-
 - <a href="#🚀-descripción"><h4>🚀 Descripción</h4></a>
 - <a href="#🎯-objetivo"><h4>🎯 Objetivo</h4></a>
 - <a href="#🛠️-tecnologías-utilizadas"><h4>🛠️ Tecnologías utilizadas</h4></a>
@@ -25,7 +23,6 @@ __<p align="center">Proyecto Final - Full Stack Developer Bootcamp en GeeksHubs 
 - <a href="#👏-agradecimientos"><h4>👏 Agradecimientos</h4></a>
 - <a href="#🌟-mejoras"><h4>🌟 Mejoras</h4></a>
 - <a href="#📧-contacto"><h4>📧 Contacto</h4></a>
-</details>
 
 
 ## 🚀 Descripción
@@ -41,7 +38,7 @@ El enfoque principal es crear un backend eficiente y escalable que permita a los
    </div>
 
 >[!IMPORTANT]
->Acceder al frontend de este proyecto: https://github.com/martaguillemolmos/frontedtattostudio
+>Ya puedes acceder al frontend de este proyecto: https://github.com/martaguillemolmos/frontedtattostudio
 
 ## 🎯 Objetivo
 
@@ -96,7 +93,8 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
 
 ## 💡Endpoints
 
-### /user
+<details> 
+<summary>  /user </summary>
 <br>
 1. Registro.
     - Descripción: Crear un nuevo usuario, recuperando la información de los campos requeridos a través del body. Y, se genera un registro en la base de datos de un nuevo usuario con el rol de "user".
@@ -158,8 +156,8 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
                 "phone": 627840804,              
             }
 
->[!NOTE]
->Estos son todos los campos que podemos modificar de nuestro perfil. No obstante, podemos modificar uno o más campos; no es necesario enviarlos todos para que se procese la solicitud.
+
+    - NOTA: Estos son todos los campos que podemos modificar de nuestro perfil. No obstante, podemos modificar uno o más campos; no es necesario enviarlos todos para que se procese la solicitud.
 
 5. Modificar el password.
     - Descripción: Creamos una ruta única para modificar el password. 
@@ -180,8 +178,7 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
                 "passwordOld": "123456"             
             }
 
->[!NOTE]
->Antes de realizar la llamada a la base de datos, comprobamos que la nueva contraeña no sea igual a la que queremos modificar, para evitar una llamada inecesaria a la API.
+    -NOTA: Antes de realizar la llamada a la base de datos, comprobamos que la nueva contraeña no sea igual a la que queremos modificar, para evitar una llamada inecesaria a la API.
 
 6. Inactivar una cuenta.
     - Descripción: Hemos creado una ruta única para inactivar la cuenta. Recuperamos el id del usuario a través del token almacenado en redux.
@@ -200,16 +197,17 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
                 "is_active": "false"            
             }
 
->[!IMPORTANT]
->Para poder acceder a todas las rutas que requieren de token, se comprueba previamente si el token está activo o no. En el caso que el usuario inactive la cuenta no podrá acceder a ninguna de esas vistas.
+    - IMPORTANTE: Para poder acceder a todas las rutas que requieren de token, se comprueba previamente si el token está activo o no. En el caso que el usuario inactive la cuenta no podrá acceder a ninguna de esas vistas.
 
 7. Obtener todos los usuarios.
     - Descripción: Obtener los datos de todos los usuarios.
 
             GET localhost:4000/user
 
+</details>
 
-### /activity
+<details>
+<summary> /activity</summary>
 <br>
 
 1. Crear una actividad.
@@ -278,8 +276,7 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
                 "image": "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp"             
             }
 
->[!NOTE]
->Estos son todos los campos que podemos modificar. No obstante, podemos modificar uno o más campos; no es necesario enviarlos todos para que se procese la solicitud.
+    - NOTA: Estos son todos los campos que podemos modificar. No obstante, podemos modificar uno o más campos; no es necesario enviarlos todos para que se procese la solicitud.
 
 6. Eliminar una actividad.
     - Descripción: Eliminamos una actividad por su id, este lo recuperamos a través del body.
@@ -293,8 +290,10 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
                 "id": "1"           
             }
 
+</details>
 
-### /details
+<details>
+<summary> /details </summary>
 <br>
 
 1. Crear un detalle.
@@ -309,8 +308,7 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
                 "type": "details",
                 "information": "Soy el detalle de la iformacion, aqui va el primero, flipa"
             }
->[!NOTE]
->En el caso que ya exista un detalle ya en nuestra base de datos con las mismas características no se realizará la solicitud.
+    - NOTA: En el caso que ya exista un detalle ya en nuestra base de datos con las mismas características no se realizará la solicitud.
         
 2. Recuperar un detalle.
     - Descripción: Obtenemos un detalle a través del id que obtenemos a través del body.
@@ -355,8 +353,7 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
                 "information": "9.00h Quedamos con vosotros en nuestras instalaciones."
             }
 
->[!NOTE]
->Estos son todos los campos que podemos modificar. No obstante, podemos modificar uno o más campos; no es necesario enviarlos todos para que se procese la solicitud.
+    - NOTA: Estos son todos los campos que podemos modificar. No obstante, podemos modificar uno o más campos; no es necesario enviarlos todos para que se procese la solicitud.
 
 6. Eliminar un detalle.
     - Descripción: Eliminamos un detalle por su id, este lo recuperamos a través del body.
@@ -370,6 +367,7 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
                 "id": "1"           
             }
 
+</details>
 
 
 ## ⚙️ Instrucciones de uso
@@ -431,7 +429,7 @@ Para llevar a cabo este proyecto he utilizado las siguientes herramientas:
 
 - La estructura del respositorio está compuesta por cinco ramas:
     - <strong>Master</strong>: Rama principal del proyecto.
-    - <strong>Dev</strong>: Rama en la que se combinan los trabajos de las otras ramas y se testean antes de pasarse a producción.
+    - <strong>Dev</strong>: Rama en la que se desarrolla el proyecto y se testea antes de pasarse a producción.
 <div align="center">
     <img src="./src/img_readme/branches-git.png" style="max-width: 70%;" width="500">
    </div>
@@ -443,7 +441,7 @@ Para llevar a cabo este proyecto he utilizado las siguientes herramientas:
 Este proyecto es el reflejo de todos los conocimientos que hemos adquirido hasta la fecha en el BootCamp FullStack Developer.
 
 ## 🌟 Mejoras
-
+- Implementar una tabla, para determinar la disponibilidad de las actividades según las necesidades del administrador.
 
 ## 📧 Contacto
 Contacta conmigo por correo electrónico [martaguillem@outlook.es](mailto:martaguillem@outlook.es). Además, puedes seguirme en:
