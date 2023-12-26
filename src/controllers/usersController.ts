@@ -371,18 +371,18 @@ const updatePassword = async (req: Request, res: Response) => {
     ) {
       return res
         .status(404)
-        .json("La contraseña debe contener de 6 a 12 caracteres");
+        .json({message:"La contraseña debe contener de 6 a 12 caracteres"});
     }
     if (!passwordRegex.test(password)) {
       return res
         .status(404)
-        .json("La contraseña no puede contener caracteres especiales.");
+        .json({message:"La contraseña no puede contener caracteres especiales."});
     }
     // Validación que el password contiene como mínimo y como máximo.
     if (passwordOld.length < 6 || passwordOld.length > 12) {
       return res
         .status(404)
-        .json("La contraseña debe contener de 6 a 12 caracteres.");
+        .json({message:"La contraseña debe contener de 6 a 12 caracteres"});
     }
     //Comprobamos que el usuario exista
     if (!user) {
@@ -402,7 +402,7 @@ const updatePassword = async (req: Request, res: Response) => {
         );
         return res
           .status(202)
-          .json(`${user.name}, la contraseña ha sido modificada`);
+          .json({message: `${user.name}, la contraseña ha sido modificada`});
       } else {
         return res.status(401).json({
           message: "La contraseña no coincide, vuelva a intentarlo.",
@@ -417,7 +417,7 @@ const updatePassword = async (req: Request, res: Response) => {
     console.log(error);
     return res.json({
       succes: false,
-      message: "No se ha modificado la contraseña",
+      message: "La contraseña no ha sido modificada.",
       error: error,
     });
   }
@@ -443,7 +443,7 @@ const deactivateAccount = async (req: Request, res: Response) => {
       (is_active !== undefined && is_active.trim() === "") ||
       is_active !== "false"
     ) {
-      return res.status(404).json(`La cuenta no ha sido desactivada.`);
+      return res.status(404).json({ message: `La cuenta no ha sido desactivada.`});
     }
 
     let accountUser;

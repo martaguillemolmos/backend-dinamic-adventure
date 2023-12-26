@@ -16,5 +16,5 @@ router.get("/", auth, getAppointmentByUser);
 router.post("/disponibility-activity", auth, disponibilityDate);
 //Recuperar todas 
 router.get("/all", auth, isSuperAdmin, getAllApointments);
-//Recuperar todas 
-router.get("/date", getAppointmentsByDate);
+//Recuperar todas por cita
+router.get("/date",auth, getAppointmentsByDate);

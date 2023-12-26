@@ -13,7 +13,7 @@ router.put("/", auth, isSuperAdmin, updateActivity_Details);
 //Recuperar por el id
 router.get("/", getActivity_DetailsById);
 //Recuperar todas 
-router.get("/all", getAllActivity_Details);
+router.get("/all", auth, isSuperAdmin, getAllActivity_Details);
 //Eliminar 
 router.delete("/", auth, isSuperAdmin, deleteActivity_Details);
 

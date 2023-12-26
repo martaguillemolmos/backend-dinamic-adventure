@@ -14,9 +14,8 @@ router.post ("/", loginUser);
 router.post ("/register", createUser);
 //Recuperar la información de todos los usuarios.
 router.get("/", auth, isSuperAdmin, getAllUsers);
-
+//Acceder al panel de administración
 router.post("/login", auth, isSuperAdmin, loginSuper);
-
 //Profile: Recuperar toda la información del usuario.
 router.get("/profile", auth, profileUser);
 //Modificar la información del perfil.

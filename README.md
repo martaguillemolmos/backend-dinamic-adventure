@@ -203,6 +203,21 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
     - Descripción: Obtener los datos de todos los usuarios.
 
             GET localhost:4000/user
+        
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
+8. Panel de administración.
+    - Descripción: El administrador del sistema podrá acceder a la pantalla de cualquier usuario registrado.
+
+            GET localhost:4000/user/profile  
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
 
 </details>
 
@@ -214,6 +229,11 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
     - Descripción: Creamos una nueva actividad, recuperando la información de los campos requeridos a través del body.
 
             POST localhost:4000/activity
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
 
         Body:
 
@@ -262,6 +282,11 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
 
             PUT localhost:4000/activity
        
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
         Body:
 
             JSON
@@ -283,6 +308,11 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
 
             DELETE localhost:4000/activity
 
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
         Body:
 
             JSON
@@ -300,6 +330,11 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
     - Descripción: Creamos un nuevo detalle, recuperando la información de los campos requeridos a través del body.
 
             POST localhost:4000/details
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
 
         Body:
 
@@ -339,11 +374,21 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
 
             GET localhost:4000/details/all
 
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
 5. Modificar un detalle por el Id.
     - Descripción: Modificamos los datos del detalle a través del id que hemos recuperado a través del body.
 
             PUT localhost:4000/details
        
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
         Body:
 
             JSON
@@ -360,6 +405,11 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
 
             DELETE localhost:4000/details
 
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
         Body:
 
             JSON
@@ -369,6 +419,258 @@ Para desarrollar este proyecto, he hecho uso de las siguientes tecnologías:
 
 </details>
 
+<details>
+<summary> /activity_details </summary>
+<br>
+
+1. Vinculamos el detalle con una actividad.
+    - Descripción: Creamos un nuevo detalle, recuperando la información de los campos requeridos a través del body.
+
+            POST localhost:4000/activity_details
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
+        Body:
+
+             JSON
+           {
+                "id_details" : 1,
+                "id_activity": 1
+            }
+
+2. Recuperar un detalle de la actividad.
+    - Descripción: Obtenemos un detalle a través del id que obtenemos a través del body.
+
+            GET localhost:4000/activity_details
+
+        Body:
+
+             JSON
+            {
+                "id": 1
+            }
+ 
+3. Recuperamos todos los detalles.
+    - Descripción: Recuperamos todos los detalles que tenemos almacenadas en la base de datos sin restricciones.
+
+            GET localhost:4000/activity_details/all
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
+4. Modificar un detalle por el Id.
+    - Descripción: Modificamos los datos del detalle a través del id que hemos recuperado a través del body.
+
+            POST localhost:4000/activity_details
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
+        Body:
+
+            JSON
+           {
+                "id": "1",
+                "id_details" : 1,
+                "id_activity": 1
+            }
+
+
+
+5. Eliminar un detalle.
+    - Descripción: Eliminamos un detalle por su id, este lo recuperamos a través del body.
+
+            DELETE localhost:4000/details
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
+        Body:
+
+            JSON
+            {
+                "id": "1"           
+            }
+
+</details>
+
+<details>
+<summary> /appointment </summary>
+<br>
+
+1. Crear una cita.
+    - Descripción: 
+
+            POST localhost:4000/appointment
+
+        Body:
+
+             JSON
+             {
+                "activity": 6,
+                "participants": 4,
+                "date_activity": "2023-12-29T20:00:00.000Z",
+                "accept_requirements": true
+            }
+
+    NOTA: Antes de crear una cita, comprueba el número de participantes con el que cuenta ya en estado "aprovado", en el caso que el número de participantes sea mayor a 4, independientemente del número de participantes (siempre que no exceda del máximo), el estado de la reserva será aprovado.
+    Por el contario, si en esa fecha no contamos con ninguna reserva, el número de participantes necesario para que una reserva sea válida, será de 4, sino se creará con estado: pendiente.
+    
+2. Recuperar una cita.
+    - Descripción: Obtenemos una cita a través del id que obtenemos a través del body.
+
+            POST localhost:4000/appointment
+
+        Body:
+
+             JSON
+            {
+                "id": 1
+            }
+
+3. Recuperamos todas las citas.
+    
+
+            GET localhost:4000/appointment/all
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
+        
+4. Recuperamos todas las citas por fecha
+   
+
+            GET localhost:4000/appointment/date
+
+        Auth:
+
+            Auth : User
+            Barer token : Token
+
+
+5. Comprobar disponibilidad.
+    - Descripción: Comprobamos la disponibilidad de las actividades.
+
+            GET localhost:4000/appointment/disponibility-activity
+
+       Auth:
+
+            Auth : User
+            Barer token : Token
+
+6. Modificar una cita.
+    - Descripción: Modificamos los datos de una cita a través del id que hemos recuperado a través del body. En caso que el estado no sea, pendiente, tan sólo permitimos  modificar la cita, si la fecha de la actividad con relación a la fecha actual es superior a 10 días.
+
+            PUT localhost:4000/appointment
+       
+        Body:
+
+            JSON
+                {
+                    "id": 1,
+                    "status_appointment": "canceled"
+                }
+
+
+</details>
+
+<details>
+<summary> /activity_details </summary>
+<br>
+
+1. Vinculamos el detalle con una actividad.
+    - Descripción: Creamos un nuevo detalle, recuperando la información de los campos requeridos a través del body.
+
+            POST localhost:4000/activity_details
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
+        Body:
+
+             JSON
+           {
+                "id_details" : 1,
+                "id_activity": 1
+            }
+
+2. Recuperar un detalle de la actividad.
+    - Descripción: Obtenemos un detalle a través del id que obtenemos a través del body.
+
+            GET localhost:4000/activity_details
+
+        Body:
+
+             JSON
+            {
+                "id": 1
+            }
+ 
+3. Recuperamos todos los detalles.
+    - Descripción: Recuperamos todos los detalles que tenemos almacenadas en la base de datos sin restricciones.
+
+            GET localhost:4000/activity_details/all
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
+4. Modificar un detalle por el Id.
+    - Descripción: Modificamos los datos del detalle a través del id que hemos recuperado a través del body.
+
+            POST localhost:4000/activity_details
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
+        Body:
+
+            JSON
+           {
+                "id": "1",
+                "id_details" : 1,
+                "id_activity": 1
+            }
+
+
+
+5. Eliminar un detalle.
+    - Descripción: Eliminamos un detalle por su id, este lo recuperamos a través del body.
+
+            DELETE localhost:4000/details
+
+        Auth:
+
+            Auth : super_admin 
+            Barer token : Token
+
+        Body:
+
+            JSON
+            {
+                "id": "1"           
+            }
+
+</details>
+
+>[!NOTE]
+> Las rutas para crear el contenido de la empresa así como las reseñas, está creado, falta la implementación de las mismas.
 
 ## ⚙️ Instrucciones de uso
 

@@ -42,6 +42,7 @@ const disponibilityDate = async (req: Request, res: Response) => {
     }
     return res.json({
       success: true,
+      message: "Dispinibilidad comprobada",
       data: appointmentsByActivity,
     });
   } catch (error) {
