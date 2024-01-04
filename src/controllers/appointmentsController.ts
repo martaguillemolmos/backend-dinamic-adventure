@@ -58,8 +58,7 @@ const createAppointment = async (req: Request, res: Response) => {
   try {
     if (
       (req.token.role == "user",
-      "admin",
-      "super_admin" && req.token.is_active == true)
+      "admin" && req.token.is_active == true)
     ) {
       const user = await Users.findOne({
         where: { id: req.token.id },
@@ -119,7 +118,8 @@ const createAppointment = async (req: Request, res: Response) => {
         );
 
         const totalParticipants = sumParticipants(participantsArray);
-        const participantsBooking = totalParticipants + participants;
+        const participantsBooking = +totalParticipants + +participants;
+        console.log(participantsBooking, "soy participants booking")
 
         if (participantsBooking >= 0 && participantsBooking <= 12) {
           if (participantsBooking >= 4 && participantsBooking <= 12) {
@@ -147,7 +147,7 @@ const createAppointment = async (req: Request, res: Response) => {
                 price: existActivity.price,
                 status_appointment: "pending",
                 date: date_activity,
-              }).save();
+              }).save(); 
               return res.json({
                 message:
                   "No completamos el grupo mínimo, nos pondremos en contacto contigo si llegamos al mínimo.",
